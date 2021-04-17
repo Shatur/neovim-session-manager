@@ -9,7 +9,7 @@ function utils.get_sessions()
 end
 
 function utils.get_last_session()
-  local most_recent_session = {timestamp = 0, filename = ''}
+  local most_recent_session = {timestamp = 0, filename = nil}
   for _, session in ipairs(utils.get_sessions()) do
     if session.timestamp > most_recent_session.timestamp then
       most_recent_session = session

@@ -9,7 +9,11 @@ function session_manager.load_session(session_filename, save_current)
 
   -- Load last session
   if not session_filename then
-    session_filename = vim.g.sessions_dir .. utils.get_last_session().filename
+    local last_session = utils.get_last_session()
+    if not last_session.filename then
+      return
+    end
+    session_filename = vim.g.sessions_dir .. last_session.filename
   end
 
   -- Remove all buffers
