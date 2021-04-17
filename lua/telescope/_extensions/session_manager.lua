@@ -15,7 +15,7 @@ local function load_session(save_current, opts)
         return {
           value = entry.filename,
           display = entry.filename:gsub(vim.g.sessions_path_replacer, '/'),
-          ordinal = entry.timestamp
+          ordinal = entry.filename
         }
       end
 
