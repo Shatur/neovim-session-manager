@@ -8,7 +8,7 @@ let g:sessions_path_replacer = get(g:, 'sessions_path_replacer', '__')
 let g:autoload_last_session = get(g:, 'autoload_last_session', v:true)
 let g:autosave_last_session = get(g:, 'autosave_last_session', v:true)
 
-command! -bang -nargs=? LoadSession lua require('session_manager').load_session(<args>, <bang>v:true)
+command! -bang -nargs=? -complete=file LoadSession lua require('session_manager').load_session(<args>, <bang>v:true)
 command! SaveSession lua require('session_manager').save_session()
 
 augroup session_manager
