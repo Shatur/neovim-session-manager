@@ -28,3 +28,4 @@ To make sessions telescope pickers available you should call `require('telescope
 | `g:sessions_path_replacer` | `'__'`                             | The character to which the path separator will be replaced for session files. |
 | `g:autoload_last_session`  | `v:true`                           | Automatically load last session on startup is started without arguments.      |
 | `g:autosave_last_session`  | `v:true`                           | Automatically save last session on exit.                                      |
+| `g:autosave_ignore_paths`  | `['~']`                            | Folders to ignore when autosaving a session.                                  |

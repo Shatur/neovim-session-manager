@@ -27,4 +27,24 @@ function utils.get_last_session()
   return most_recent_session
 end
 
+function utils.autoload_session()
+  if vim.g.autoload_last_session and vim.fn.argc() == 0 then
+    require('session_manager').load_session()
+  end
+end
+
+function utils.autosave_session()
+  if not vim.g.autosave_last_session then
+    return
+  end
+
+  for _, path in ipairs(vim.g.autosave_ignore_paths) do
+    if vim.fn.expand(path) == vim.fn.getcwd() then
+      return
+    end
+  end
+
+  require('session_manager').save_session()
+end
+
 return utils
