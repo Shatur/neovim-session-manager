@@ -26,9 +26,9 @@ function session_manager.load_session(session_filename, save_current)
     session_filename = vim.g.sessions_dir .. last_session.filename
   end
 
-  vim.cmd('bufdo bdelete') -- Remove all buffers
+  vim.cmd('silent bufdo bdelete') -- Remove all buffers
 
-  vim.cmd('source ' .. session_filename)
+  vim.cmd('silent source ' .. session_filename)
 end
 
 function session_manager.save_session()
