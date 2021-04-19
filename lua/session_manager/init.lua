@@ -32,13 +32,10 @@ function session_manager.load_session(session_filename, save_current)
 end
 
 function session_manager.save_session()
-  local root = vim.fn.getcwd()
   if vim.fn.isdirectory(vim.g.sessions_dir) ~= 1 then
     vim.fn.mkdir(vim.g.sessions_dir)
   end
-  root = root:gsub('/', vim.g.sessions_path_replacer)
-  local session = vim.g.sessions_dir .. root
-  vim.cmd('mksession! ' .. session)
+  vim.cmd('mksession! ' .. vim.g.sessions_dir .. utils.path_to_session_name(vim.fn.getcwd()))
 end
 
 return session_manager

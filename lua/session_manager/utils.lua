@@ -1,5 +1,31 @@
 local utils = {}
 
+function utils.path_to_session_name(path)
+  if vim.fn.has('win32') == 1 then
+    path = path:gsub(':', vim.g.sessions_colon_replacer)
+    if not vim.o.shellslash then
+      path = path:gsub('\\', vim.g.sessions_path_replacer)
+    end
+  else
+    path = path:gsub('/', vim.g.sessions_path_replacer)
+  end
+
+  return path
+end
+
+function utils.session_name_to_path(session_name)
+  if vim.fn.has('win32') == 1 then
+    session_name = session_name:gsub(vim.g.sessions_colon_replacer, ':')
+    if not vim.o.shellslash then
+      session_name = session_name:gsub(vim.g.sessions_path_replacer, '\\')
+    end
+  else
+    session_name = session_name:gsub(vim.g.sessions_path_replacer, '/')
+  end
+
+  return session_name
+end
+
 function utils.get_sessions()
   local sessions = {}
   for _, session_filename in ipairs(vim.fn.readdir(vim.g.sessions_dir)) do

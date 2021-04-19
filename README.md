@@ -21,11 +21,12 @@ To make sessions telescope pickers available you should call `require('telescope
 
 ## Parameters
 
-| Variable                   | Default value                      | Description                                                                   |
-| -------------------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
-| `g:loaded_session_manager` | `v:true`                           | Set this value to `v:false` to disable plugin loading.                        |
-| `g:sessions_dir`           | `stdpath('data') .. '/sessions/')` | The directory where the session files will be saved.                          |
-| `g:sessions_path_replacer` | `'__'`                             | The character to which the path separator will be replaced for session files. |
-| `g:autoload_last_session`  | `v:true`                           | Automatically load last session on startup is started without arguments.      |
-| `g:autosave_last_session`  | `v:true`                           | Automatically save last session on exit.                                      |
-| `g:autosave_ignore_paths`  | `['~']`                            | Folders to ignore when autosaving a session.                                  |
+| Variable                    | Default value                      | Description                                                                                    |
+| --------------------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `g:loaded_session_manager`  | `v:true`                           | Set this value to `v:false` to disable plugin loading.                                         |
+| `g:sessions_dir`            | `stdpath('data') .. '/sessions/')` | The directory where the session files will be saved.                                           |
+| `g:sessions_path_replacer`  | `'__'`                             | The character to which the path separator will be replaced for session files.                  |
+| `g:sessions_colon_replacer` | `'++'`                             | The character to which the colon symbol will be replaced for session files (only for Windows). |
+| `g:autoload_last_session`   | `v:true`                           | Automatically load last session on startup is started without arguments.                       |
+| `g:autosave_last_session`   | `v:true`                           | Automatically save last session on exit.                                                       |
+| `g:autosave_ignore_paths`   | `['~']`                            | Folders to ignore when autosaving a session.                                                   |

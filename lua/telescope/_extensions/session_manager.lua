@@ -14,7 +14,7 @@ local function load_session(save_current, opts)
       entry_maker = function(entry)
         return {
           value = entry.filename,
-          display = entry.filename:gsub(vim.g.sessions_path_replacer, '/'),
+          display = utils.session_name_to_path(entry.filename),
           ordinal = entry.filename
         }
       end
