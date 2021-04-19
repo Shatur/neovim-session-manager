@@ -8,7 +8,7 @@ function utils.get_sessions()
   table.sort(sessions, function(a, b) return a.timestamp > b.timestamp end)
 
   -- If the last session is the current one, then preselect the previous one
-  if sessions[1].filename == vim.fn.getcwd():gsub('/', vim.g.sessions_path_replacer) then
+  if #sessions >= 2 and sessions[1].filename == utils.path_to_session_name(vim.fn.getcwd()) then
     sessions[1], sessions[2] = sessions[2], sessions[1]
   end
 
