@@ -4,7 +4,7 @@ local session_manager = {}
 function session_manager.load_session(session_filename, save_current)
   -- Remove all non-file buffers first
   for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
-    if #vim.api.nvim_buf_get_option(buffer, 'buftype') ~= 0 then
+    if #vim.api.nvim_buf_get_option(buffer, 'buftype') ~= 0 or vim.api.nvim_buf_get_option(buffer, 'buflisted') == 0 then
       -- Use vimscript API because vim.api.nvim_buf_delete causes issues with Lua callbacks
       vim.cmd('bdelete! ' .. tostring(buffer))
     end
