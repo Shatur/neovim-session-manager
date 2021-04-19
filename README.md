@@ -10,6 +10,8 @@ A Neovim plugin that use build-in `:mksession` to manage sessions in a convenien
 
 To make sessions telescope pickers available you should call `require('telescope').load_extension('session_manager')`.
 
+It is recommended to remove `buffers` (will remove hidden and unloaded buffers recovery), `help` and `blank` from `sessionoptions` for better experience.
+
 ## Commands
 
 | Command                                       | Function                                                             | Description                                                                                                               |
