@@ -20,7 +20,7 @@ function session_manager.load_session(session_filename, save_current)
 
   -- Scedule buffers cleanup to avoid callback issues and source the session
   vim.schedule(function()
-    vim.cmd('bufdo! bwipeout') -- Remove all buffers
+    vim.cmd('silent bufdo! bwipeout') -- Remove all buffers
     vim.cmd('silent source ' .. session_filename)
   end)
 end
