@@ -16,13 +16,17 @@ function session_manager.load_session(session_filename, save_current)
   end
 
   -- Stop all LSP clients first
-  vim.lsp.stop_client(vim.lsp.get_active_clients(), true)
+  vim.lsp.stop_client(vim.lsp.get_active_clients())
 
   -- Scedule buffers cleanup to avoid callback issues and source the session
-  vim.schedule(function()
-    vim.cmd('silent bufdo! bwipeout') -- Remove all buffers
+  vim.schedule(vim.schedule_wrap(function()
+    for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
+      if vim.api.nvim_buf_is_valid(buffer) then
+          vim.api.nvim_buf_delete(buffer, {})
+      end
+    end
     vim.cmd('silent source ' .. session_filename)
-  end)
+  end))
 end
 
 function session_manager.save_session()
@@ -32,9 +36,9 @@ function session_manager.save_session()
 
   -- Remove all non-file and utility buffers because they cannot be saved
   for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_is_loaded(buffer) then
+    if vim.api.nvim_buf_is_valid(buffer) then
       if #vim.api.nvim_buf_get_option(buffer, 'buftype') ~= 0 or vim.api.nvim_buf_get_option(buffer, 'buflisted') == 0 then
-        vim.api.nvim_buf_delete(buffer, {force = true, unload = true})
+        vim.api.nvim_buf_delete(buffer, {force = true})
       end
     end
   end
