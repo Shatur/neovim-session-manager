@@ -20,11 +20,15 @@ function session_manager.load_session(session_filename, save_current)
 
   -- Scedule buffers cleanup to avoid callback issues and source the session
   vim.schedule(vim.schedule_wrap(function()
+    -- Delete all buffers first except the current one to avoid entering buffers scheduled for deletion
+    local current_buffer = vim.api.nvim_get_current_buf()
     for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
-      if vim.api.nvim_buf_is_valid(buffer) then
+      if vim.api.nvim_buf_is_valid(buffer) and buffer ~= current_buffer then
           vim.api.nvim_buf_delete(buffer, {})
       end
     end
+    vim.api.nvim_buf_delete(current_buffer, {})
+
     vim.cmd('silent source ' .. session_filename)
   end))
 end
