@@ -47,6 +47,11 @@ end
 
 function utils.get_last_session()
   local most_recent_session = {timestamp = 0, filename = nil}
+
+  if vim.fn.isdirectory(vim.g.sessions_dir) ~= 1 then
+    return most_recent_session
+  end
+
   for _, session_filename in ipairs(vim.fn.readdir(vim.g.sessions_dir)) do
     if vim.fn.isdirectory(utils.session_name_to_path(session_filename)) == 1 then
       local timestamp = vim.fn.getftime(vim.g.sessions_dir .. session_filename)
