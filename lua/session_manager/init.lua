@@ -19,7 +19,7 @@ function session_manager.load_session(session_filename, save_current)
   vim.lsp.stop_client(vim.lsp.get_active_clients())
 
   -- Scedule buffers cleanup to avoid callback issues and source the session
-  vim.schedule(vim.schedule_wrap(function()
+  vim.schedule(function()
     -- Delete all buffers first except the current one to avoid entering buffers scheduled for deletion
     local current_buffer = vim.api.nvim_get_current_buf()
     for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
@@ -30,7 +30,7 @@ function session_manager.load_session(session_filename, save_current)
     vim.api.nvim_buf_delete(current_buffer, {})
 
     vim.cmd('silent source ' .. session_filename)
-  end))
+  end)
 end
 
 function session_manager.save_session()
