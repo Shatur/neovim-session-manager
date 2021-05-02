@@ -7,7 +7,7 @@ function session_manager.load_session(session_filename, save_current)
   end
 
   -- Load last session
-  if not session_filename then
+  if not session_filename or #session_filename == 0 then
     local last_session = utils.get_last_session()
     if not last_session.filename then
       return
