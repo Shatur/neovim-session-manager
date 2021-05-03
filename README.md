@@ -1,6 +1,8 @@
 # Neovim Session Manager
 
-A Neovim plugin that use build-in `:mksession` to manage sessions in a convenient way. The plugin can automatically load the last session on startup, save the current one on exit and switch between sessions.
+A Neovim plugin that use build-in `:mksession` to manage sessions in a convenient way. The plugin can automatically load the last session on startup, save the current one on exit and switch between sessions using Telescope.
+
+The plugin saves the sessions in the specified folder (see [parameters](#parameters)). The session corresponds to the working directory. If a session already exists for the current folder, it will be overwritten.
 
 ## Dependencies
 
