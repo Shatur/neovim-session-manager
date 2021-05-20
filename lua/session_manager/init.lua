@@ -41,7 +41,7 @@ function session_manager.save_session()
   -- Remove all non-file and utility buffers because they cannot be saved
   for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_valid(buffer) then
-      if #vim.api.nvim_buf_get_option(buffer, 'buftype') ~= 0 or vim.api.nvim_buf_get_option(buffer, 'buflisted') == 0 then
+      if #vim.api.nvim_buf_get_option(buffer, 'buftype') ~= 0 or not vim.api.nvim_buf_get_option(buffer, 'buflisted') then
         vim.api.nvim_buf_delete(buffer, {force = true})
       end
     end
