@@ -6,6 +6,19 @@ function session_manager.load_session(session_filename, save_current)
     session_manager.save_session()
   end
 
+  -- Ask to save files in current session before closing them
+  for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_get_option(buffer, 'modified') then
+      local choice = vim.fn.confirm('The files in the current session have changed. Save changes?', '&Yes\n&No\n&Cancel')
+      if choice == 3 then
+        return -- Cancel
+      elseif choice == 1 then
+        vim.cmd('silent wall')
+      end
+      break
+    end
+  end
+
   -- Load last session
   if not session_filename or #session_filename == 0 then
     local last_session = utils.get_last_session()
@@ -24,10 +37,10 @@ function session_manager.load_session(session_filename, save_current)
     local current_buffer = vim.api.nvim_get_current_buf()
     for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
       if vim.api.nvim_buf_is_valid(buffer) and buffer ~= current_buffer then
-          vim.api.nvim_buf_delete(buffer, {})
+        vim.api.nvim_buf_delete(buffer, {force = true})
       end
     end
-    vim.api.nvim_buf_delete(current_buffer, {})
+    vim.api.nvim_buf_delete(current_buffer, {force = true})
 
     vim.cmd('silent source ' .. session_filename)
   end)
