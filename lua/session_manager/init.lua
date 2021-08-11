@@ -24,7 +24,7 @@ function session_manager.load_session(session_filename, save_current)
   if not session_filename or #session_filename == 0 then
     local last_session = get_last_session()
     if not last_session.filename then
-      print('Sessions list is empty')
+      vim.notify('Sessions list is empty')
       return
     end
     session_filename = last_session.filename
