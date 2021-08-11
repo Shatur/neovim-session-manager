@@ -15,6 +15,6 @@ command! -nargs=? SaveSession lua require('session_manager').save_session(<q-arg
 
 augroup session_manager
   autocmd!
-  autocmd VimEnter * ++nested lua require('session_manager.utils').autoload_session()
-  autocmd VimLeavePre * lua require('session_manager.utils').autosave_session()
+  autocmd VimEnter * ++nested lua require('session_manager').autoload_session()
+  autocmd VimLeavePre * lua require('session_manager').autosave_session()
 augroup END

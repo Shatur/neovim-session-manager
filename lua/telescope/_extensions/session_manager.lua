@@ -4,17 +4,16 @@ local pickers = require('telescope.pickers')
 local finders = require('telescope.finders')
 local sorters = require('telescope.sorters')
 local session_manager = require('session_manager')
-local utils = require('session_manager.utils')
 
 local function load_session(save_current, opts)
   pickers.new(opts, {
     prompt_title = 'Select a session',
     finder = finders.new_table({
-      results = utils.get_sessions(),
+      results = session_manager.get_sessions(),
       entry_maker = function(entry)
         return {
           value = entry.filename,
-          display = utils.session_name_to_path(entry.filename),
+          display = session_manager.session_name_to_path(entry.filename),
           ordinal = entry.filename,
         }
       end,
