@@ -11,7 +11,7 @@ let g:autosave_last_session = get(g:, 'autosave_last_session', v:true)
 let g:autosave_ignore_paths = get(g:, 'autosave_ignore_paths', ['~'])
 
 command! -bang -nargs=? -complete=file LoadSession lua require('session_manager').load_session(<q-args>, <bang>true)
-command! SaveSession lua require('session_manager').save_session()
+command! -nargs=? SaveSession lua require('session_manager').save_session(<q-args>)
 
 augroup session_manager
   autocmd!

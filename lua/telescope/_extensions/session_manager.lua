@@ -23,7 +23,7 @@ local function load_session(save_current, opts)
     attach_mappings = function(prompt_bufnr, map)
       local source_session = function()
         actions.close(prompt_bufnr)
-        session_manager.load_session(vim.g.sessions_dir .. actions.get_selected_entry(prompt_bufnr).value, save_current)
+        session_manager.load_session(actions.get_selected_entry(prompt_bufnr).value, save_current)
       end
 
       actions.select_default:replace(source_session)

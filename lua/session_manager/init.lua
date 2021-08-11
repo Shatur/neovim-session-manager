@@ -9,7 +9,7 @@ function session_manager.load_session(session_filename, save_current)
       print('Sessions list is empty')
       return
     end
-    session_filename = vim.g.sessions_dir .. last_session.filename
+    session_filename = last_session.filename
   end
 
   if save_current then
@@ -43,11 +43,11 @@ function session_manager.load_session(session_filename, save_current)
     end
     vim.api.nvim_buf_delete(current_buffer, { force = true })
 
-    vim.cmd('silent source ' .. session_filename)
+    vim.cmd('silent source ' .. vim.g.sessions_dir .. session_filename)
   end)
 end
 
-function session_manager.save_session()
+function session_manager.save_session(filename)
   if vim.fn.isdirectory(vim.g.sessions_dir) ~= 1 then
     vim.fn.mkdir(vim.g.sessions_dir)
   end
@@ -66,7 +66,11 @@ function session_manager.save_session()
     vim.cmd('%argdel')
   end
 
-  vim.cmd('mksession! ' .. vim.g.sessions_dir .. utils.path_to_session_name(vim.fn.getcwd()))
+  if not filename or #filename == 0 then
+    filename = vim.fn.getcwd()
+  end
+
+  vim.cmd('mksession! ' .. vim.g.sessions_dir .. utils.path_to_session_name(filename))
 end
 
 return session_manager
