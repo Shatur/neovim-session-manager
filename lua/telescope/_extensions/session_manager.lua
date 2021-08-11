@@ -9,17 +9,16 @@ local utils = require('session_manager.utils')
 local function load_session(save_current, opts)
   pickers.new(opts, {
     prompt_title = 'Select a session',
-    finder = finders.new_table {
+    finder = finders.new_table({
       results = utils.get_sessions(),
       entry_maker = function(entry)
         return {
           value = entry.filename,
           display = utils.session_name_to_path(entry.filename),
-          ordinal = entry.filename
+          ordinal = entry.filename,
         }
-      end
-
-    },
+      end,
+    }),
     sorter = sorters.get_fzy_sorter(),
     attach_mappings = function(prompt_bufnr, map)
       local source_session = function()
@@ -34,13 +33,13 @@ local function load_session(save_current, opts)
         load_session(save_current, opts)
       end
 
-      map('n', 'd', delete_session, {nowait = true})
+      map('n', 'd', delete_session, { nowait = true })
       return true
     end,
   }):find()
 end
 
-return telescope.register_extension {
+return telescope.register_extension({
   exports = {
     load = function(opts)
       load_session(true, opts)
@@ -48,6 +47,5 @@ return telescope.register_extension {
     discard_and_load = function(opts)
       load_session(false, opts)
     end,
-
-  }
-}
+  },
+})

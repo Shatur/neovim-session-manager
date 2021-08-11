@@ -38,10 +38,10 @@ function session_manager.load_session(session_filename, save_current)
     local current_buffer = vim.api.nvim_get_current_buf()
     for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
       if vim.api.nvim_buf_is_valid(buffer) and buffer ~= current_buffer then
-        vim.api.nvim_buf_delete(buffer, {force = true})
+        vim.api.nvim_buf_delete(buffer, { force = true })
       end
     end
-    vim.api.nvim_buf_delete(current_buffer, {force = true})
+    vim.api.nvim_buf_delete(current_buffer, { force = true })
 
     vim.cmd('silent source ' .. session_filename)
   end)
@@ -56,7 +56,7 @@ function session_manager.save_session()
   for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_valid(buffer) then
       if #vim.api.nvim_buf_get_option(buffer, 'buftype') ~= 0 or not vim.api.nvim_buf_get_option(buffer, 'buflisted') then
-        vim.api.nvim_buf_delete(buffer, {force = true})
+        vim.api.nvim_buf_delete(buffer, { force = true })
       end
     end
   end

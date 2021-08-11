@@ -30,12 +30,14 @@ function utils.get_sessions()
   local sessions = {}
   for _, session_filename in ipairs(vim.fn.readdir(vim.g.sessions_dir)) do
     if vim.fn.isdirectory(utils.session_name_to_path(session_filename)) == 1 then
-      table.insert(sessions, {timestamp = vim.fn.getftime(vim.g.sessions_dir .. session_filename), filename = session_filename})
+      table.insert(sessions, { timestamp = vim.fn.getftime(vim.g.sessions_dir .. session_filename), filename = session_filename })
     else
       vim.fn.delete(session_filename)
     end
   end
-  table.sort(sessions, function(a, b) return a.timestamp > b.timestamp end)
+  table.sort(sessions, function(a, b)
+    return a.timestamp > b.timestamp
+  end)
 
   -- If the last session is the current one, then preselect the previous one
   if #sessions >= 2 and sessions[1].filename == utils.path_to_session_name(vim.fn.getcwd()) then
@@ -46,7 +48,7 @@ function utils.get_sessions()
 end
 
 function utils.get_last_session()
-  local most_recent_session = {timestamp = 0, filename = nil}
+  local most_recent_session = { timestamp = 0, filename = nil }
 
   if vim.fn.isdirectory(vim.g.sessions_dir) ~= 1 then
     return most_recent_session
