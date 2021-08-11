@@ -2,6 +2,16 @@ local utils = require('session_manager.utils')
 local session_manager = {}
 
 function session_manager.load_session(session_filename, save_current)
+  -- Load last session
+  if not session_filename or #session_filename == 0 then
+    local last_session = utils.get_last_session()
+    if not last_session.filename then
+      print('Sessions list is empty')
+      return
+    end
+    session_filename = vim.g.sessions_dir .. last_session.filename
+  end
+
   if save_current then
     session_manager.save_session()
   end
@@ -17,15 +27,6 @@ function session_manager.load_session(session_filename, save_current)
       end
       break
     end
-  end
-
-  -- Load last session
-  if not session_filename or #session_filename == 0 then
-    local last_session = utils.get_last_session()
-    if not last_session.filename then
-      return
-    end
-    session_filename = vim.g.sessions_dir .. last_session.filename
   end
 
   -- Stop all LSP clients first
