@@ -5,7 +5,7 @@ local finders = require('telescope.finders')
 local sorters = require('telescope.sorters')
 local session_manager = require('session_manager')
 
-local function load_session(save_current, opts)
+local function select_session(opts)
   pickers.new(opts, {
     prompt_title = 'Select a session',
     finder = finders.new_table({
@@ -22,14 +22,14 @@ local function load_session(save_current, opts)
     attach_mappings = function(prompt_bufnr, map)
       local source_session = function()
         actions.close(prompt_bufnr)
-        session_manager.load_session(actions.get_selected_entry(prompt_bufnr).value, save_current)
+        session_manager.load_session(actions.get_selected_entry(prompt_bufnr).value)
       end
 
       actions.select_default:replace(source_session)
 
       local delete_session = function()
         vim.fn.delete(vim.g.sessions_dir .. actions.get_selected_entry(prompt_bufnr).value)
-        load_session(save_current, opts)
+        select_session(opts)
       end
 
       map('n', 'd', delete_session, { nowait = true })
@@ -40,11 +40,6 @@ end
 
 return telescope.register_extension({
   exports = {
-    load = function(opts)
-      load_session(true, opts)
-    end,
-    discard_and_load = function(opts)
-      load_session(false, opts)
-    end,
+    sessions = select_session,
   },
 })

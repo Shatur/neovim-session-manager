@@ -14,12 +14,11 @@ To make sessions telescope pickers available you should call `require('telescope
 
 ## Commands
 
-| Command                                       | Function                                                             | Description                                                                                                                                                                                |
-| --------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --- |
-| `:SaveSession [<session>]`                    | `require('session_manager').save_session(filename)`                  | Works like `:mksession`, but saves/creates session in `g:sessions_dir`. If `filename` is not specified, the current directory name path will be used for the name.                         |     |
-| `:LoadSession[!] [<session>]`                 | `require('session_manager').load_session(filename, save_current)`    | Will remove all buffers and `:source` specified session file. When [!] is included an existing session will not be saved. If `filename` is not specified, the last session will be loaded. |
-| `:Telescope session_manager load`             | `require('telescope').extensions.session_manager.load{}`             | Select and load a session. Use `d` in normal mode to selected session.                                                                                                                     |
-| `:Telescope session_manager discard_and_load` | `require('telescope').extensions.session_manager.discard_and_load{}` | Same as the above but without saving the current session.                                                                                                                                  |
+| Command                       | Function                                                          | Description                                                                                                                                                                                |
+| ----------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --- |
+| `:SaveSession [<session>]`    | `require('session_manager').save_session(filename)`               | Works like `:mksession`, but saves/creates session in `g:sessions_dir`. If `filename` is not specified, the current directory name path will be used for the name.                         |     |
+| `:LoadSession[!] [<session>]` | `require('session_manager').load_session(filename, save_current)` | Will remove all buffers and `:source` specified session file. When [!] is included an existing session will not be saved. If `filename` is not specified, the last session will be loaded. |
+| `:Telescope sessions`         | `require('telescope').extensions.sessions.load{}`                 | Select and load a session. Use `d` in normal mode to selected session.                                                                                                                     |
 
 ## Parameters
 
