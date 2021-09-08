@@ -30,7 +30,7 @@ function session_manager.load_session(session_filename, bang)
     session_filename = last_session.filename
   end
 
-  if not bang or bang ~= '!' then
+  if not bang or #bang == 0 then
     -- Ask to save files in current session before closing them
     for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
       if vim.api.nvim_buf_get_option(buffer, 'modified') then
