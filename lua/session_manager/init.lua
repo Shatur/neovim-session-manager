@@ -38,7 +38,7 @@ function session_manager.load_session(session_filename, bang)
         if choice == 3 then
           return -- Cancel
         elseif choice == 1 then
-          vim.cmd('silent wall')
+          vim.api.nvim_command('silent wall')
         end
         break
       end
@@ -59,7 +59,7 @@ function session_manager.load_session(session_filename, bang)
     end
     vim.api.nvim_buf_delete(current_buffer, { force = true })
 
-    vim.cmd('silent source ' .. vim.g.sessions_dir .. session_filename)
+    vim.api.nvim_command('silent source ' .. vim.g.sessions_dir .. session_filename)
   end)
 end
 
@@ -79,14 +79,14 @@ function session_manager.save_session(filename)
 
   -- Clear all passed arguments to avoid re-executing them
   if vim.fn.argc() > 0 then
-    vim.cmd('%argdel')
+    vim.api.nvim_command('%argdel')
   end
 
   if not filename or #filename == 0 then
     filename = vim.fn.getcwd()
   end
 
-  vim.cmd('mksession! ' .. vim.g.sessions_dir .. session_manager.path_to_session_name(filename))
+  vim.api.nvim_command('mksession! ' .. vim.g.sessions_dir .. session_manager.path_to_session_name(filename))
 end
 
 function session_manager.get_sessions()
