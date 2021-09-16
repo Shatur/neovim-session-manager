@@ -22,6 +22,9 @@ local function select_session(opts)
     attach_mappings = function(prompt_bufnr, map)
       local source_session = function()
         actions.close(prompt_bufnr)
+        if opts['save_current'] then
+          session_manager.save_session()
+        end
         session_manager.load_session(actions.get_selected_entry(prompt_bufnr).value)
       end
 
