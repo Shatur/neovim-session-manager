@@ -22,17 +22,23 @@ local function select_session(opts)
     attach_mappings = function(prompt_bufnr, map)
       local source_session = function()
         actions.close(prompt_bufnr)
-        if opts['save_current'] then
-          session_manager.save_session()
+        local entry = actions.get_selected_entry(prompt_bufnr)
+        if entry then
+          if opts['save_current'] then
+            session_manager.save_session()
+          end
+          session_manager.load_session(entry.value)
         end
-        session_manager.load_session(actions.get_selected_entry(prompt_bufnr).value)
       end
 
       actions.select_default:replace(source_session)
 
       local delete_session = function()
-        vim.fn.delete(vim.g.sessions_dir .. actions.get_selected_entry(prompt_bufnr).value)
-        select_session(opts)
+        local entry = actions.get_selected_entry(prompt_bufnr)
+        if entry then
+          vim.fn.delete(vim.g.sessions_dir .. entry.value)
+          select_session(opts)
+        end
       end
 
       map('n', 'd', delete_session, { nowait = true })
