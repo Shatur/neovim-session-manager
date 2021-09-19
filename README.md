@@ -10,7 +10,7 @@ The plugin saves the sessions in the specified folder (see [parameters](#paramet
 
 ## Setup
 
-To make sessions telescope pickers available you should call `require('telescope').load_extension('session_manager')`.
+To make sessions telescope pickers available you should call `require('telescope').load_extension('sessions')`.
 
 ## Commands
 
