@@ -3,9 +3,13 @@ local actions = require('telescope.actions')
 local pickers = require('telescope.pickers')
 local finders = require('telescope.finders')
 local sorters = require('telescope.sorters')
+local themes = require('telescope.themes')
 local session_manager = require('session_manager')
 
 local function select_session(opts)
+  -- Use dropdown theme by default
+  opts = themes.get_dropdown(opts)
+
   pickers.new(opts, {
     prompt_title = 'Select a session',
     finder = finders.new_table({
