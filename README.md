@@ -8,10 +8,6 @@ The plugin saves the sessions in the specified folder (see [parameters](#paramet
 
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) to select sessions.
 
-## Setup
-
-To make sessions telescope pickers available you should call `require('telescope').load_extension('sessions')`.
-
 ## Commands
 
 | Command                                   | Function                                                          | Description                                                                                                                                                                                |
@@ -20,14 +16,19 @@ To make sessions telescope pickers available you should call `require('telescope
 | `:LoadSession[!] [<session>]`             | `require('session_manager').load_session(filename, save_current)` | Will remove all buffers and `:source` specified session file. When [!] is included an existing session will not be saved. If `filename` is not specified, the last session will be loaded. |
 | `:Telescope sessions [save_current=true]` | `require('telescope').extensions.sessions.sessions()`             | Select and load a session. You can pass `save_current=true` to save the current session. Use `d` in normal mode to delete selected session.                                                |
 
-## Parameters
+## Configuration
 
-| Variable                    | Default value                      | Description                                                                                    |
-| --------------------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `g:loaded_session_manager`  | `v:true`                           | Set this value to `v:false` to disable plugin loading.                                         |
-| `g:sessions_dir`            | `stdpath('data') .. '/sessions/')` | The directory where the session files will be saved.                                           |
-| `g:sessions_path_replacer`  | `'__'`                             | The character to which the path separator will be replaced for session files.                  |
-| `g:sessions_colon_replacer` | `'++'`                             | The character to which the colon symbol will be replaced for session files (only for Windows). |
-| `g:autoload_last_session`   | `v:true`                           | Automatically load last session on startup is started without arguments.                       |
-| `g:autosave_last_session`   | `v:true`                           | Automatically save last session on exit.                                                       |
-| `g:autosave_ignore_paths`   | `['~']`                            | Folders to ignore when autosaving a session.                                                   |
+To configure the plugin, you can call `require('session_manager').setup(values)`, where `values` is a dictionary with the parameters you want to override. Here are the defaults:
+
+```lua
+require('session_manager').setup({
+  sessions_dir = vim.fn.stdpath('data') .. '/sessions/', -- The directory where the session files will be saved. The path should ends with a trailing slash.
+  path_replacer = '__', -- The character to which the path separator will be replaced for session files.
+  colon_replacer = '++', -- The character to which the colon symbol will be replaced for session files. Used only on Windows.
+  autoload_last_session = true, -- Automatically load last session on startup is started without arguments.
+  autosave_last_session = true, -- Automatically save last session on exit.
+  autosave_ignore_paths = { '~' }, -- Folders to ignore when autosaving a session.
+})
+```
+
+To make sessions telescope pickers available you should call `require('telescope').load_extension('sessions')`.

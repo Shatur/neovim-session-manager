@@ -5,6 +5,7 @@ local finders = require('telescope.finders')
 local sorters = require('telescope.sorters')
 local themes = require('telescope.themes')
 local session_manager = require('session_manager')
+local config = require('session_manager.config')
 
 local function select_session(opts)
   -- Use dropdown theme by default
@@ -40,7 +41,7 @@ local function select_session(opts)
       local delete_session = function()
         local entry = actions.get_selected_entry(prompt_bufnr)
         if entry then
-          vim.fn.delete(vim.g.sessions_dir .. entry.value)
+          vim.fn.delete(config.sessions_dir .. entry.value)
           select_session(opts)
         end
       end

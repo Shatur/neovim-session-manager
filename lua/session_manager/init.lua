@@ -1,15 +1,16 @@
+local config = require('session_manager.config')
 local session_manager = {}
 
 local function get_last_session()
   local most_recent_session = { timestamp = 0, filename = nil }
 
-  if vim.fn.isdirectory(vim.g.sessions_dir) ~= 1 then
+  if vim.fn.isdirectory(config.sessions_dir) ~= 1 then
     return most_recent_session
   end
 
-  for _, session_filename in ipairs(vim.fn.readdir(vim.g.sessions_dir)) do
+  for _, session_filename in ipairs(vim.fn.readdir(config.sessions_dir)) do
     if vim.fn.isdirectory(session_manager.session_name_to_path(session_filename)) == 1 then
-      local timestamp = vim.fn.getftime(vim.g.sessions_dir .. session_filename)
+      local timestamp = vim.fn.getftime(config.sessions_dir .. session_filename)
       if most_recent_session.timestamp < timestamp then
         most_recent_session.timestamp = timestamp
         most_recent_session.filename = session_filename
@@ -17,6 +18,10 @@ local function get_last_session()
     end
   end
   return most_recent_session
+end
+
+function session_manager.setup(values)
+  setmetatable(config, { __index = vim.tbl_extend('force', config.defaults, values) })
 end
 
 function session_manager.load_session(session_filename, bang)
@@ -59,13 +64,13 @@ function session_manager.load_session(session_filename, bang)
     end
     vim.api.nvim_buf_delete(current_buffer, { force = true })
 
-    vim.api.nvim_command('silent source ' .. vim.g.sessions_dir .. session_filename)
+    vim.api.nvim_command('silent source ' .. config.sessions_dir .. session_filename)
   end)
 end
 
 function session_manager.save_session(filename)
-  if vim.fn.isdirectory(vim.g.sessions_dir) ~= 1 then
-    vim.fn.mkdir(vim.g.sessions_dir)
+  if vim.fn.isdirectory(config.sessions_dir) ~= 1 then
+    vim.fn.mkdir(config.sessions_dir)
   end
 
   -- Remove all non-file and utility buffers because they cannot be saved
@@ -86,14 +91,14 @@ function session_manager.save_session(filename)
     filename = vim.fn.getcwd()
   end
 
-  vim.api.nvim_command('mksession! ' .. vim.g.sessions_dir .. session_manager.path_to_session_name(filename))
+  vim.api.nvim_command('mksession! ' .. config.sessions_dir .. session_manager.path_to_session_name(filename))
 end
 
 function session_manager.get_sessions()
   local sessions = {}
-  for _, session_filename in ipairs(vim.fn.readdir(vim.g.sessions_dir)) do
+  for _, session_filename in ipairs(vim.fn.readdir(config.sessions_dir)) do
     if vim.fn.isdirectory(session_manager.session_name_to_path(session_filename)) == 1 then
-      table.insert(sessions, { timestamp = vim.fn.getftime(vim.g.sessions_dir .. session_filename), filename = session_filename })
+      table.insert(sessions, { timestamp = vim.fn.getftime(config.sessions_dir .. session_filename), filename = session_filename })
     else
       vim.fn.delete(session_filename)
     end
@@ -112,12 +117,12 @@ end
 
 function session_manager.path_to_session_name(path)
   if vim.fn.has('win32') == 1 then
-    path = path:gsub(':', vim.g.sessions_colon_replacer)
+    path = path:gsub(':', config.colon_replacer)
     if not vim.o.shellslash then
-      path = path:gsub('\\', vim.g.sessions_path_replacer)
+      path = path:gsub('\\', config.path_replacer)
     end
   else
-    path = path:gsub('/', vim.g.sessions_path_replacer)
+    path = path:gsub('/', config.path_replacer)
   end
 
   return path
@@ -125,29 +130,29 @@ end
 
 function session_manager.session_name_to_path(session_name)
   if vim.fn.has('win32') == 1 then
-    session_name = session_name:gsub(vim.g.sessions_colon_replacer, ':')
+    session_name = session_name:gsub(config.colon_replacer, ':')
     if not vim.o.shellslash then
-      session_name = session_name:gsub(vim.g.sessions_path_replacer, '\\')
+      session_name = session_name:gsub(config.path_replacer, '\\')
     end
   else
-    session_name = session_name:gsub(vim.g.sessions_path_replacer, '/')
+    session_name = session_name:gsub(config.path_replacer, '/')
   end
 
   return session_name
 end
 
 function session_manager.autoload_session()
-  if vim.g.autoload_last_session and vim.fn.argc() == 0 then
+  if config.autoload_last_session and vim.fn.argc() == 0 then
     session_manager.load_session()
   end
 end
 
 function session_manager.autosave_session()
-  if not vim.g.autosave_last_session then
+  if not config.autosave_last_session then
     return
   end
 
-  for _, path in ipairs(vim.g.autosave_ignore_paths) do
+  for _, path in ipairs(config.autosave_ignore_paths) do
     if vim.fn.expand(path) == vim.fn.getcwd() then
       return
     end
