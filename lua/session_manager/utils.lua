@@ -29,7 +29,7 @@ function utils.load_session(filename, discard_current)
     for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
       if vim.api.nvim_buf_get_option(buffer, 'modified') then
         local choice = vim.fn.confirm('The files in the current session have changed. Save changes?', '&Yes\n&No\n&Cancel')
-        if choice == 3 then
+        if choice == 3 or choice == 0 then
           return -- Cancel
         elseif choice == 1 then
           vim.api.nvim_command('silent wall')
