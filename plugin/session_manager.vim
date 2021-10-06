@@ -3,8 +3,8 @@ if exists('g:loaded_session_manager')
 endif
 let g:loaded_session_manager = v:true
 
-command! -bang -nargs=? -complete=file LoadSession lua require('session_manager').load_session(<q-args>, <q-bang>)
-command! -nargs=? SaveSession lua require('session_manager').save_session(<q-args>)
+command! -bang LoadSession lua require('session_manager').load_last_session(<q-bang>)
+command! SaveSession lua require('session_manager').save_current_session()
 
 augroup session_manager
   autocmd!

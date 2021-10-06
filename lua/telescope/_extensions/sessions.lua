@@ -4,8 +4,9 @@ local pickers = require('telescope.pickers')
 local finders = require('telescope.finders')
 local sorters = require('telescope.sorters')
 local themes = require('telescope.themes')
-local session_manager = require('session_manager')
 local config = require('session_manager.config')
+local utils = require('session_manager.utils')
+local Path = require('plenary.path')
 
 local function select_session(opts)
   -- Use dropdown theme by default
@@ -14,12 +15,12 @@ local function select_session(opts)
   pickers.new(opts, {
     prompt_title = 'Select a session',
     finder = finders.new_table({
-      results = session_manager.get_sessions(),
+      results = utils.get_sessions(),
       entry_maker = function(entry)
         return {
           value = entry.filename,
-          display = session_manager.session_name_to_path(entry.filename),
-          ordinal = entry.filename,
+          display = entry.dir.filename,
+          ordinal = entry.dir.filename,
         }
       end,
     }),
@@ -30,9 +31,9 @@ local function select_session(opts)
         local entry = actions.get_selected_entry(prompt_bufnr)
         if entry then
           if opts['save_current'] then
-            session_manager.save_session()
+            utils.save_session(utils.dir_to_session_filename())
           end
-          session_manager.load_session(entry.value)
+          utils.load_session(entry.value)
         end
       end
 
@@ -41,7 +42,7 @@ local function select_session(opts)
       local delete_session = function()
         local entry = actions.get_selected_entry(prompt_bufnr)
         if entry then
-          vim.fn.delete(config.sessions_dir .. entry.value)
+          Path:new(entry.value):rm()
           select_session(opts)
         end
       end
