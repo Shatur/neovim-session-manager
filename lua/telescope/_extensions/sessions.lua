@@ -1,5 +1,6 @@
 local telescope = require('telescope')
 local actions = require('telescope.actions')
+local state = require('telescope.actions.state')
 local pickers = require('telescope.pickers')
 local finders = require('telescope.finders')
 local sorters = require('telescope.sorters')
@@ -28,7 +29,7 @@ local function select_session(opts)
     attach_mappings = function(prompt_bufnr, map)
       local source_session = function()
         actions.close(prompt_bufnr)
-        local entry = actions.get_selected_entry(prompt_bufnr)
+        local entry = state.get_selected_entry()
         if entry then
           if opts['save_current'] then
             utils.save_session(utils.dir_to_session_filename())
@@ -40,7 +41,7 @@ local function select_session(opts)
       actions.select_default:replace(source_session)
 
       local delete_session = function()
-        local entry = actions.get_selected_entry(prompt_bufnr)
+        local entry = state.get_selected_entry()
         if entry then
           Path:new(entry.value):rm()
           select_session(opts)
