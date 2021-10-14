@@ -21,8 +21,9 @@ The plugin saves the sessions in the specified folder (see [parameters](#paramet
 To configure the plugin, you can call `require('session_manager').setup(values)`, where `values` is a dictionary with the parameters you want to override. Here are the defaults:
 
 ```lua
+local Path = require('plenary.path')
 require('session_manager').setup({
-  sessions_dir = vim.fn.stdpath('data') .. '/sessions', -- The directory where the session files will be saved.
+  sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'), -- The directory where the session files will be saved.
   path_replacer = '__', -- The character to which the path separator will be replaced for session files.
   colon_replacer = '++', -- The character to which the colon symbol will be replaced for session files.
   autoload_last_session = true, -- Automatically load last session on startup is started without arguments.

@@ -11,7 +11,7 @@ function utils.get_last_session_filename()
 
   local most_recent_filename = nil
   local most_recent_timestamp = 0
-  for _, session_filename in ipairs(scandir.scan_dir(config.sessions_dir)) do
+  for _, session_filename in ipairs(scandir.scan_dir(tostring(config.sessions_dir))) do
     if utils.session_filename_to_dir(session_filename):is_dir() then
       local timestamp = vim.fn.getftime(session_filename)
       if most_recent_timestamp < timestamp then
@@ -58,7 +58,7 @@ function utils.load_session(filename, discard_current)
 end
 
 function utils.save_session(filename)
-  local sessions_dir = Path:new(config.sessions_dir)
+  local sessions_dir = Path:new(tostring(config.sessions_dir))
   if not sessions_dir:is_dir() then
     sessions_dir:mkdir()
   end
@@ -82,7 +82,7 @@ end
 
 function utils.get_sessions()
   local sessions = {}
-  for _, session_filename in ipairs(scandir.scan_dir(config.sessions_dir)) do
+  for _, session_filename in ipairs(scandir.scan_dir(tostring(config.sessions_dir))) do
     local dir = utils.session_filename_to_dir(session_filename)
     if dir:is_dir() then
       table.insert(sessions, { timestamp = vim.fn.getftime(session_filename), filename = session_filename, dir = dir })
@@ -104,7 +104,7 @@ end
 
 function utils.session_filename_to_dir(filename)
   -- Get session filename
-  local dir = filename:sub(#config.sessions_dir + 2)
+  local dir = filename:sub(#tostring(config.sessions_dir) + 2)
 
   dir = dir:gsub(config.colon_replacer, ':')
   dir = dir:gsub(config.path_replacer, Path.path.sep)
