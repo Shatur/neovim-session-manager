@@ -35,6 +35,12 @@ function session_manager.autosave_session()
     end
   end
 
+  for _, filetype in ipairs(config.autosave_ignore_filetypes) do
+      if filetype == vim.bo.filetype then
+          return
+      end
+  end
+
   session_manager.save_current_session()
 end
 
