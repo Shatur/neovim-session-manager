@@ -29,9 +29,8 @@ require('session_manager').setup({
   autoload_last_session = true, -- Automatically load last session on startup is started without arguments.
   autosave_last_session = true, -- Automatically save last session on exit.
   autosave_ignore_paths = { '~' }, -- Folders to ignore when autosaving a session.
-  autosave_ignore_filetypes = {}, -- File types to ignore when autosaving a session. 
+  autosave_ignore_not_normal = true, -- Plugin will not save a session when no normal buffers are opened.
     -- This option is useful when using a start screen plugin, so an opened start screen only won't overwrite an existing session.
-    -- File type can be looked up using :lua print(vim.bo.filetype) with a start screen opened. But usually a status line plugin displays it.
 })
 ```
 
