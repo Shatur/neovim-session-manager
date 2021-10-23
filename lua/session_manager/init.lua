@@ -38,9 +38,11 @@ function session_manager.autosave_session()
   if config.autosave_ignore_not_normal then
     local at_least_one_normal = false
     for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
-      if utils.what_buffer(buffer) == 0 then
-        at_least_one_normal = true
-        break
+      if vim.api.nvim_buf_is_valid(buffer) then
+        if utils.is_normal_buffer(buffer) then
+          at_least_one_normal = true
+          break
+        end
       end
     end
     if not at_least_one_normal then

@@ -118,18 +118,11 @@ function utils.dir_to_session_filename(dir)
   return Path:new(config.sessions_dir):joinpath(filename).filename
 end
 
-function utils.what_buffer(buffer)
-  local normal = 0
-  local not_normal = 1
-  local invalid = 2
-  if vim.api.nvim_buf_is_valid(buffer) then
-    if #vim.api.nvim_buf_get_option(buffer, 'buftype') ~= 0 or not vim.api.nvim_buf_get_option(buffer, 'buflisted') then
-      return not_normal
-    else
-      return normal
-    end
+function utils.is_normal_buffer(buffer)
+  if #vim.api.nvim_buf_get_option(buffer, 'buftype') ~= 0 or not vim.api.nvim_buf_get_option(buffer, 'buflisted') then
+    return false
   else
-    return invalid
+    return true
   end
 end
 
