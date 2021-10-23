@@ -35,10 +35,12 @@ function session_manager.autosave_session()
     end
   end
 
-  for _, filetype in ipairs(config.autosave_ignore_filetypes) do
-      if filetype == vim.bo.filetype then
+  if config.autoload_ignore_non_normal then
+    for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
+      if utils.what_buffer(buffer) == 0 then
           return
       end
+    end
   end
 
   session_manager.save_current_session()

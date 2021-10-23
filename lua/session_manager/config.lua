@@ -8,7 +8,7 @@ local config = {
     autoload_last_session = true,
     autosave_last_session = true,
     autosave_ignore_paths = { '~' },
-    autosave_ignore_filetypes = {},
+    autosave_ignore_not_normal = true,
   },
 }
 
