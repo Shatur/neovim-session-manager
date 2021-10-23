@@ -119,11 +119,7 @@ function utils.dir_to_session_filename(dir)
 end
 
 function utils.is_normal_buffer(buffer)
-  if #vim.api.nvim_buf_get_option(buffer, 'buftype') ~= 0 or not vim.api.nvim_buf_get_option(buffer, 'buflisted') then
-    return false
-  else
-    return true
-  end
+  return #vim.api.nvim_buf_get_option(buffer, 'buftype') == 0 and vim.api.nvim_buf_get_option(buffer, 'buflisted')
 end
 
 return utils
