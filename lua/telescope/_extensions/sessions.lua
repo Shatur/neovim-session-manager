@@ -5,7 +5,6 @@ local pickers = require('telescope.pickers')
 local finders = require('telescope.finders')
 local sorters = require('telescope.sorters')
 local themes = require('telescope.themes')
-local config = require('session_manager.config')
 local utils = require('session_manager.utils')
 local Path = require('plenary.path')
 
