@@ -29,6 +29,7 @@ require('session_manager').setup({
   autoload_last_session = true, -- Automatically load last session on startup is started without arguments.
   autosave_last_session = true, -- Automatically save last session on exit.
   autosave_ignore_paths = { '~' }, -- Folders to ignore when autosaving a session.
+  autosave_ignore_not_normal = true, -- Plugin will not save a session when no writable and listed buffers are opened.
 })
 ```
 
