@@ -28,7 +28,6 @@ require('session_manager').setup({
   colon_replacer = '++', -- The character to which the colon symbol will be replaced for session files.
   autoload_last_session = true, -- Automatically load last session on startup is started without arguments.
   autosave_last_session = true, -- Automatically save last session on exit.
-  autosave_ignore_paths = { '~' }, -- Folders to ignore when autosaving a session.
   autosave_ignore_not_normal = true, -- Plugin will not save a session when no writable and listed buffers are opened.
 })
 ```

@@ -1,6 +1,5 @@
 local config = require('session_manager.config')
 local utils = require('session_manager.utils')
-local Path = require('plenary.path')
 local session_manager = {}
 
 function session_manager.setup(values)
@@ -27,12 +26,6 @@ end
 function session_manager.autosave_session()
   if not config.autosave_last_session then
     return
-  end
-
-  for _, path in ipairs(config.autosave_ignore_paths) do
-    if Path:new(path):expand() == vim.fn.getcwd() then
-      return
-    end
   end
 
   if config.autosave_ignore_not_normal then

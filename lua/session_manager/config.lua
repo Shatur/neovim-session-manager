@@ -7,7 +7,6 @@ local config = {
     colon_replacer = '++',
     autoload_last_session = true,
     autosave_last_session = true,
-    autosave_ignore_paths = { '~' },
     autosave_ignore_not_normal = true,
   },
 }
