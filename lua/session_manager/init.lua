@@ -28,14 +28,7 @@ function session_manager.autosave_session()
     return
   end
 
-  if config.autosave_ignore_not_normal then
-    for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
-      if vim.api.nvim_buf_is_valid(buffer) and utils.is_normal_buffer(buffer) then
-        session_manager.save_current_session()
-        return
-      end
-    end
-  else
+  if not config.autosave_ignore_not_normal or utils.normal_buffer_present() then
     session_manager.save_current_session()
   end
 end
