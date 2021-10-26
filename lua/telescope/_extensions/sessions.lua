@@ -31,7 +31,7 @@ local function select_session(opts)
         actions.close(prompt_bufnr)
         local entry = state.get_selected_entry()
         if entry then
-          if opts['save_current'] and (not config.autosave_ignore_not_normal or utils.normal_buffer_present()) then
+          if opts['save_current'] and (not config.autosave_ignore_not_normal or utils.is_normal_buffer_present()) then
             utils.save_session(utils.dir_to_session_filename())
           end
           utils.load_session(entry.value)
