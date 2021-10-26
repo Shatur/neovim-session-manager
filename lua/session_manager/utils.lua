@@ -122,4 +122,13 @@ function utils.is_normal_buffer(buffer)
   return #vim.api.nvim_buf_get_option(buffer, 'buftype') == 0 and vim.api.nvim_buf_get_option(buffer, 'buflisted')
 end
 
+function utils.normal_buffer_present()
+  for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_valid(buffer) and utils.is_normal_buffer(buffer) then
+      return true
+    end
+  end
+  return false
+end
+
 return utils
