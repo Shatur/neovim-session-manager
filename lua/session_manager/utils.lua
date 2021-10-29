@@ -1,7 +1,7 @@
 local config = require('session_manager.config')
 local scandir = require('plenary.scandir')
 local Path = require('plenary.path')
-local utils = {}
+local utils = {is_session=false}
 
 function utils.get_last_session_filename()
   if not Path:new(config.sessions_dir):is_dir() then
@@ -53,6 +53,7 @@ function utils.load_session(filename, discard_current)
     end
     vim.api.nvim_buf_delete(current_buffer, { force = true })
 
+    utils.is_session = true
     vim.api.nvim_command('silent source ' .. filename)
   end)
 end
@@ -77,6 +78,7 @@ function utils.save_session(filename)
     vim.api.nvim_command('%argdel')
   end
 
+  utils.is_session = true
   vim.api.nvim_command('mksession! ' .. filename)
 end
 

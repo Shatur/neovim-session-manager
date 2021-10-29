@@ -8,6 +8,7 @@ local config = {
     autoload_last_session = true,
     autosave_last_session = true,
     autosave_ignore_not_normal = true,
+    autosave_only_in_session = true
   },
 }
 

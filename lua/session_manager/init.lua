@@ -28,6 +28,10 @@ function session_manager.autosave_session()
     return
   end
 
+  if config.autosave_only_in_session and not utils.is_session then
+    return
+  end
+
   if not config.autosave_ignore_not_normal or utils.is_normal_buffer_present() then
     session_manager.save_current_session()
   end
