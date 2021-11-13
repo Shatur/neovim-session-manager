@@ -14,7 +14,7 @@ function session_manager.load_last_session(bang)
   end
 end
 
-function session_manager.load_current_session(bang)
+function session_manager.load_current_dir_session(bang)
   local session_name = utils.dir_to_session_filename(vim.loop.cwd())
   if Path:new(session_name):exists() then
     utils.load_session(session_name, bang and #bang ~= 0)
@@ -28,7 +28,7 @@ end
 function session_manager.autoload_session()
   if config.autoload_last_session and vim.fn.argc() == 0 then
     if config.autoload_current_session then
-      session_manager.load_current_session()
+      session_manager.load_current_dir_session()
     else
       session_manager.load_last_session()
     end
