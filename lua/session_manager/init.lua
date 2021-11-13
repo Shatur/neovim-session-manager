@@ -1,4 +1,5 @@
 local config = require('session_manager.config')
+local autoloadModes = require('session_manager.autoloadModes')
 local utils = require('session_manager.utils')
 local Path = require('plenary.path')
 local session_manager = {}
@@ -26,11 +27,12 @@ function session_manager.save_current_session()
 end
 
 function session_manager.autoload_session()
-  if config.autoload_last_session and vim.fn.argc() == 0 then
-    if config.autoload_current_session then
+  if config.autoload_mode ~= autoloadModes.Disabled and vim.fn.argc() == 0 then
+    if config.autoload_mode == autoloadModes.CurrentDir then
       session_manager.load_current_dir_session()
-    else
+    else if config.autoload_mode == autoloadModes.LastSession then
       session_manager.load_last_session()
+    end
     end
   end
 end
