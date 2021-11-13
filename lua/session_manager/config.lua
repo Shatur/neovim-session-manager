@@ -6,6 +6,7 @@ local config = {
     path_replacer = '__',
     colon_replacer = '++',
     autoload_last_session = true,
+    autoload_current_session = true,
     autosave_last_session = true,
     autosave_ignore_not_normal = true,
   },

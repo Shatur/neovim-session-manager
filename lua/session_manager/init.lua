@@ -13,13 +13,26 @@ function session_manager.load_last_session(bang)
   end
 end
 
+function session_manager.load_current_session(bang)
+  local cwd = vim.fn['getcwd']()
+  local session_name = utils.dir_to_session_filename(cwd)
+  local tmp_f = io.open(session_name, "r")
+  if tmp_f ~= nil then
+    utils.load_session(session_name, bang and #bang ~= 0)
+  end
+end
+
 function session_manager.save_current_session()
   utils.save_session(utils.dir_to_session_filename())
 end
 
 function session_manager.autoload_session()
   if config.autoload_last_session and vim.fn.argc() == 0 then
-    session_manager.load_last_session()
+    if config.autoload_current_session then
+      session_manager.load_current_session()
+    else
+      session_manager.load_last_session()
+    end
   end
 end
 
