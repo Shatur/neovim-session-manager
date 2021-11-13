@@ -14,8 +14,7 @@ function session_manager.load_last_session(bang)
 end
 
 function session_manager.load_current_session(bang)
-  local cwd = vim.fn['getcwd']()
-  local session_name = utils.dir_to_session_filename(cwd)
+  local session_name = utils.dir_to_session_filename(vim.loop.cwd())
   local tmp_f = io.open(session_name, "r")
   if tmp_f ~= nil then
     utils.load_session(session_name, bang and #bang ~= 0)
