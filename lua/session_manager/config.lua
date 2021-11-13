@@ -1,15 +1,21 @@
 local Path = require('plenary.path')
-local autoloadModes = require('session_manager.autoloadModes')
+local Enum = require('plenary.enum')
 
 local config = {
-  defaults = {
-    sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'),
-    path_replacer = '__',
-    colon_replacer = '++',
-    autoload_mode = autoloadModes.CurrentDir,
-    autosave_last_session = true,
-    autosave_ignore_not_normal = true,
+  AutoloadMode = Enum {
+    'Disabled',
+    'CurrentDir',
+    'LastSession'
   },
+}
+
+config.defaults = {
+  sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'),
+  path_replacer = '__',
+  colon_replacer = '++',
+  autoload_mode = config.AutoloadMode.CurrentDir,
+  autosave_last_session = true,
+  autosave_ignore_not_normal = true,
 }
 
 setmetatable(config, { __index = config.defaults })
