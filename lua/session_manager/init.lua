@@ -1,5 +1,6 @@
 local config = require('session_manager.config')
 local utils = require('session_manager.utils')
+local Path = require('plenary.path')
 local session_manager = {}
 
 function session_manager.setup(values)
@@ -15,8 +16,7 @@ end
 
 function session_manager.load_current_session(bang)
   local session_name = utils.dir_to_session_filename(vim.loop.cwd())
-  local tmp_f = io.open(session_name, "r")
-  if tmp_f ~= nil then
+  if Path:new(session_name):exists() then
     utils.load_session(session_name, bang and #bang ~= 0)
   end
 end
