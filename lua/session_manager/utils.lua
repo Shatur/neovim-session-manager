@@ -95,7 +95,7 @@ function utils.get_sessions()
   end)
 
   -- If the last session is the current one, then preselect the previous one
-  if #sessions >= 2 and sessions[1].filename == utils.dir_to_session_filename() then
+  if #sessions >= 2 and sessions[1].filename == utils.dir_to_session_filename().filename then
     sessions[1], sessions[2] = sessions[2], sessions[1]
   end
 
@@ -115,7 +115,7 @@ function utils.dir_to_session_filename(dir)
   local filename = dir and dir.filename or vim.loop.cwd()
   filename = filename:gsub(':', config.colon_replacer)
   filename = filename:gsub(Path.path.sep, config.path_replacer)
-  return Path:new(config.sessions_dir):joinpath(filename).filename
+  return Path:new(config.sessions_dir):joinpath(filename)
 end
 
 function utils.is_normal_buffer(buffer)
