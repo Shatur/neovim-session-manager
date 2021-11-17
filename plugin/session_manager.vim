@@ -11,4 +11,5 @@ augroup session_manager
   autocmd!
   autocmd VimEnter * ++nested lua require('session_manager').autoload_session()
   autocmd VimLeavePre * lua require('session_manager').autosave_session()
+  autocmd StdinReadPre * let g:started_with_stdin = v:true
 augroup END
