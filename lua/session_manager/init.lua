@@ -29,9 +29,8 @@ function session_manager.autoload_session()
   if config.autoload_mode ~= AutoloadMode.Disabled and vim.fn.argc() == 0 and not vim.g.started_with_stdin then
     if config.autoload_mode == AutoloadMode.CurrentDir then
       session_manager.load_current_dir_session()
-    else if config.autoload_mode == AutoloadMode.LastSession then
+    elseif config.autoload_mode == AutoloadMode.LastSession then
       session_manager.load_last_session()
-    end
     end
   end
 end

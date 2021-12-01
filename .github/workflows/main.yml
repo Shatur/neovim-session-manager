@@ -1,0 +1,36 @@
+name: Main
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v2
+
+      - name: Luacheck
+        uses: nebularg/actions-luacheck@v1
+        with:
+          files: .
+          annotate: warning
+
+  format:
+    name: Format
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v2
+
+      - name: Stylua
+        uses: JohnnyMorganz/stylua-action@1.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --color always --check .

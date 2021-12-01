@@ -2,11 +2,11 @@ local Path = require('plenary.path')
 local Enum = require('plenary.enum')
 
 local config = {
-  AutoloadMode = Enum {
+  AutoloadMode = Enum({
     'Disabled',
     'CurrentDir',
-    'LastSession'
-  },
+    'LastSession',
+  }),
 }
 
 config.defaults = {
