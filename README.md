@@ -10,11 +10,12 @@ The plugin saves the sessions in the specified folder (see [configuration](#conf
 
 ## Commands
 
-| Command                                    | Description                                                                                                                                 |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `:SaveSession`                             | Works like `:mksession`, but saves/creates current directory as a session in `sessions_dir`.                                                |
-| `:LoadSession[!]`                          | Will remove all buffers and `:source` the last saved session file. When `!` is specified, the modified buffers will not be saved.           |
-| `:Telescope sessions [save_current=false]` | Select and load a session. You can pass `save_current=true` to save the current session. Use `d` in normal mode to delete selected session. |
+| Command                                    | Description                                                                                                                                                 |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `:SaveSession`                             | Works like `:mksession`, but saves/creates current directory as a session in `sessions_dir`.                                                                |
+| `:LoadLastSession[!]`                      | Will remove all buffers and `:source` the last saved session file. When `!` is specified, the modified buffers will not be saved.                           |
+| `:LoadCurrentDirSession[!]`                | Will remove all buffers and `:source` the last saved session file of the current dirtectory. When `!` is specified, the modified buffers will not be saved. |
+| `:Telescope sessions [save_current=false]` | Select and load a session. You can pass `save_current=true` to save the current session. Use `d` in normal mode to delete selected session.                 |
 
 ## Configuration
 
