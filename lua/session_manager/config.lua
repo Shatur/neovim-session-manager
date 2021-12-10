@@ -16,6 +16,7 @@ config.defaults = {
   autoload_mode = config.AutoloadMode.LastSession,
   autosave_last_session = true,
   autosave_ignore_not_normal = true,
+  autosave_only_in_session = false,
 }
 
 setmetatable(config, { __index = config.defaults })
