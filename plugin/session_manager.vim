@@ -8,10 +8,11 @@ if exists('g:loaded_session_manager')
 endif
 let g:loaded_session_manager = v:true
 
-command! -bang LoadSession lua require('session_manager').load_session(<q-bang>)
-command! -bang LoadLastSession lua require('session_manager').load_last_session(<q-bang>)
-command! -bang LoadCurrentDirSession lua require('session_manager').load_current_dir_session(<q-bang>)
-command! SaveSession lua require('session_manager').save_current_session()
+function! s:match_commands(arg, line, pos)
+  return luaeval('require("session_manager.commands").match_commands("' .. a:arg .. '")')
+endfunction
+
+command! -bang -nargs=1 -complete=customlist,s:match_commands SessionManager lua require('session_manager.commands').run_command(<q-args>, <q-bang>)
 
 augroup session_manager
   autocmd!

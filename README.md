@@ -10,12 +10,16 @@ The plugin saves the sessions in the specified folder (see [configuration](#conf
 
 ## Commands
 
-| Command                     | Description                                                                                                                                                                                                                                                                                                                             |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `:LoadSession[!]`           | Select and load a session. Uses `vim.ui.select()`. When `!` is specified, the modified buffers will not be saved. To use your favorite picker like Telescope, consider installing [dressing.nvim](https://github.com/stevearc/dressing.nvim) or [telescope-ui-select.nvim](https://github.com/nvim-telescope/telescope-ui-select.nvim). |
-| `:SaveSession`              | Works like `:mksession`, but saves/creates current directory as a session in `sessions_dir`.                                                                                                                                                                                                                                            |
-| `:LoadLastSession[!]`       | Will remove all buffers and `:source` the last saved session file. When `!` is specified, the modified buffers will not be saved.                                                                                                                                                                                                       |
-| `:LoadCurrentDirSession[!]` | Will remove all buffers and `:source` the last saved session file of the current dirtectory. When `!` is specified, the modified buffers will not be saved.                                                                                                                                                                             |
+Use the command `:SessionManager[!]` with one of the following arguments:
+
+| Argument                   | Description                                                                                                                                                                                                                                                              |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `load_session`             | Select and load a session. Uses `vim.ui.select()`. To use your favorite picker like Telescope, consider installing [dressing.nvim](https://github.com/stevearc/dressing.nvim) or [telescope-ui-select.nvim](https://github.com/nvim-telescope/telescope-ui-select.nvim). |
+| `load_last_session`        | Works like `:mksession`, but saves/creates current directory as a session in `sessions_dir`.                                                                                                                                                                             |
+| `load_current_dir_session` | Will remove all buffers and `:source` the last saved session. file.                                                                                                                                                                                                      |
+| `save_current_session`     | Will remove all buffers and `:source` the last saved session file of the current. dirtectory.                                                                                                                                                                            |
+
+When `!` is specified, the modified buffers will not be saved.
 
 ## Configuration
 
