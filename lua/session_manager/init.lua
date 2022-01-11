@@ -1,6 +1,7 @@
 local config = require('session_manager.config')
 local AutoloadMode = require('session_manager.config').AutoloadMode
 local utils = require('session_manager.utils')
+local Path = require('plenary.path')
 local session_manager = {}
 
 function session_manager.setup(values)
@@ -15,7 +16,7 @@ function session_manager.load_session(bang)
     table.insert(display_names, session.dir.filename)
   end
 
-  vim.ui.select(display_names, { prompt = 'Select a session' }, function(_, idx)
+  vim.ui.select(display_names, { prompt = 'Load session' }, function(_, idx)
     if idx then
       if config.autosave_last_session and (not config.autosave_ignore_not_normal or utils.is_normal_buffer_present()) then
         session_manager.save_current_session()
@@ -51,6 +52,21 @@ function session_manager.autoload_session()
       session_manager.load_last_session()
     end
   end
+end
+
+function session_manager.delete_session()
+  local sessions = utils.get_sessions()
+
+  local display_names = {}
+  for _, session in ipairs(sessions) do
+    table.insert(display_names, session.dir.filename)
+  end
+
+  vim.ui.select(display_names, { prompt = 'Delete session' }, function(_, idx)
+    if idx then
+      Path:new(sessions[idx].filename):rm()
+    end
+  end)
 end
 
 function session_manager.autosave_session()
