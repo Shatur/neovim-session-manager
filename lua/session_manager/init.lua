@@ -7,6 +7,24 @@ function session_manager.setup(values)
   setmetatable(config, { __index = vim.tbl_extend('force', config.defaults, values) })
 end
 
+function session_manager.load_session(bang)
+  local sessions = utils.get_sessions()
+
+  local display_names = {}
+  for _, session in ipairs(sessions) do
+    table.insert(display_names, session.dir.filename)
+  end
+
+  vim.ui.select(display_names, { prompt = 'Select a session' }, function(_, idx)
+    if idx then
+      if config.autosave_last_session and (not config.autosave_ignore_not_normal or utils.is_normal_buffer_present()) then
+        session_manager.save_current_session()
+      end
+      utils.load_session(sessions[idx].filename, bang and #bang ~= 0)
+    end
+  end)
+end
+
 function session_manager.load_last_session(bang)
   local last_session = utils.get_last_session_filename()
   if last_session then

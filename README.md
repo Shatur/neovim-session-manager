@@ -1,21 +1,21 @@
 # Neovim Session Manager
 
-A Neovim plugin that use build-in `:mksession` to manage sessions like folders in VSCode. It allows you to save the current folder as a session to open it later. The plugin can also automatically load the last session on startup, save the current one on exit and switch between session folders using Telescope.
+A Neovim plugin that use build-in `:mksession` to manage sessions like folders in VSCode. It allows you to save the current folder as a session to open it later. The plugin can also automatically load the last session on startup, save the current one on exit and switch between session folders.
 
 The plugin saves the sessions in the specified folder (see [configuration](#configuration)). The session corresponds to the working directory. If a session already exists for the current folder, it will be overwritten.
 
 ## Dependencies
 
-- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) to select sessions.
+- [plenary.nvim](https://github.com/nvim-lua/plenary.nvim) for internal helpers.
 
 ## Commands
 
-| Command                                    | Description                                                                                                                                                 |
-| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `:SaveSession`                             | Works like `:mksession`, but saves/creates current directory as a session in `sessions_dir`.                                                                |
-| `:LoadLastSession[!]`                      | Will remove all buffers and `:source` the last saved session file. When `!` is specified, the modified buffers will not be saved.                           |
-| `:LoadCurrentDirSession[!]`                | Will remove all buffers and `:source` the last saved session file of the current dirtectory. When `!` is specified, the modified buffers will not be saved. |
-| `:Telescope sessions [save_current=false]` | Select and load a session. You can pass `save_current=true` to save the current session. Use `d` in normal mode to delete selected session.                 |
+| Command                     | Description                                                                                                                                                                                                                                                                                                                             |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `:LoadSession[!]`           | Select and load a session. Uses `vim.ui.select()`. When `!` is specified, the modified buffers will not be saved. To use your favorite picker like Telescope, consider installing [dressing.nvim](https://github.com/stevearc/dressing.nvim) or [telescope-ui-select.nvim](https://github.com/nvim-telescope/telescope-ui-select.nvim). |
+| `:SaveSession`              | Works like `:mksession`, but saves/creates current directory as a session in `sessions_dir`.                                                                                                                                                                                                                                            |
+| `:LoadLastSession[!]`       | Will remove all buffers and `:source` the last saved session file. When `!` is specified, the modified buffers will not be saved.                                                                                                                                                                                                       |
+| `:LoadCurrentDirSession[!]` | Will remove all buffers and `:source` the last saved session file of the current dirtectory. When `!` is specified, the modified buffers will not be saved.                                                                                                                                                                             |
 
 ## Configuration
 
@@ -28,10 +28,8 @@ require('session_manager').setup({
   path_replacer = '__', -- The character to which the path separator will be replaced for session files.
   colon_replacer = '++', -- The character to which the colon symbol will be replaced for session files.
   autoload_mode = require('session_manager.config').AutoloadMode.LastSession, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
-  autosave_last_session = true, -- Automatically save last session on exit.
+  autosave_last_session = true, -- Automatically save last session on exit and on session switch.
   autosave_ignore_not_normal = true, -- Plugin will not save a session when no writable and listed buffers are opened.
   autosave_only_in_session = false, -- Always autosaves session. If true, only autosaves after a session is active.
 })
 ```
-
-To make sessions telescope pickers available you should call `require('telescope').load_extension('sessions')`.
