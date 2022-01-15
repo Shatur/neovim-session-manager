@@ -125,7 +125,19 @@ function utils.dir_to_session_filename(dir)
 end
 
 function utils.is_normal_buffer(buffer)
-  return #vim.api.nvim_buf_get_option(buffer, 'buftype') == 0 and vim.api.nvim_buf_get_option(buffer, 'buflisted')
+  local buftype = vim.api.nvim_buf_get_option(buffer, 'buftype')
+  local buflisted = vim.api.nvim_buf_get_option(buffer, 'buflisted')
+  local filetype = vim.api.nvim_buf_get_option(buffer, 'filetype')
+  return #buftype == 0 and buflisted and utils.is_normal_filetype(filetype)
+end
+
+function utils.is_normal_filetype(filetype)
+  for i, v in pairs(config.autosave_ignore_filetypes) do
+    if (v == filetype) then
+      return false
+    end
+  end
+  return true
 end
 
 function utils.is_normal_buffer_present()
