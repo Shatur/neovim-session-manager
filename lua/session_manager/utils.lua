@@ -126,13 +126,12 @@ end
 
 function utils.is_normal_buffer(buffer)
   if #vim.api.nvim_buf_get_option(buffer, 'buftype') ~= 0 then
-      return false
+    return false
+  elseif not vim.api.nvim_buf_get_option(buffer, 'buflisted') then
+    return false
+  elseif vim.tbl_contains(config.autosave_ignore_filetypes, vim.api.nvim_buf_get_option(buffer, 'filetype')) then
+    return false
   end
-  if not vim.api.nvim_buf_get_option(buffer, 'buflisted') then
-      return false
-  end
-  if vim.tbl_contains(config.autosave_ignore_filetypes, vim.api.nvim_buf_get_option(buffer, 'filetype')) then
-      return false
   return true
 end
 
