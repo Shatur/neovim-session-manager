@@ -70,7 +70,7 @@ function utils.save_session(filename)
 
   -- Remove all non-file and utility buffers because they cannot be saved
   for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_is_valid(buffer) and not utils.is_normal_buffer(buffer) then
+    if vim.api.nvim_buf_is_valid(buffer) and not utils.is_restorable(buffer) then
       vim.api.nvim_buf_delete(buffer, { force = true })
     end
   end
@@ -122,20 +122,27 @@ function utils.dir_to_session_filename(dir)
   return Path:new(config.sessions_dir):joinpath(filename)
 end
 
-function utils.is_normal_buffer(buffer)
-  if #vim.api.nvim_buf_get_option(buffer, 'buftype') ~= 0 then
-    return false
-  elseif not vim.api.nvim_buf_get_option(buffer, 'buflisted') then
-    return false
-  elseif vim.tbl_contains(config.autosave_ignore_filetypes, vim.api.nvim_buf_get_option(buffer, 'filetype')) then
+function utils.is_restorable(buffer)
+  local buftype = vim.api.nvim_buf_get_option(buffer, 'buftype')
+  if #buftype == 0 then
+    -- Normal buffer, check if it listed
+    if not vim.api.nvim_buf_get_option(buffer, 'buflisted') then
+      return false
+    end
+  elseif buftype ~= 'terminal' then
+    -- Buffers other then normal or terminal are impossible to restore
+    return true
+  end
+
+  if vim.tbl_contains(config.autosave_ignore_filetypes, vim.api.nvim_buf_get_option(buffer, 'filetype')) then
     return false
   end
   return true
 end
 
-function utils.is_normal_buffer_present()
+function utils.is_restorable_buffer_present()
   for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_is_valid(buffer) and utils.is_normal_buffer(buffer) then
+    if vim.api.nvim_buf_is_valid(buffer) and utils.is_restorable(buffer) then
       return true
     end
   end
