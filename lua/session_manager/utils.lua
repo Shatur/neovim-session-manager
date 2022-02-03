@@ -131,7 +131,7 @@ function utils.is_restorable(buffer)
     end
   elseif buftype ~= 'terminal' then
     -- Buffers other then normal or terminal are impossible to restore
-    return true
+    return false
   end
 
   if vim.tbl_contains(config.autosave_ignore_filetypes, vim.api.nvim_buf_get_option(buffer, 'filetype')) then
