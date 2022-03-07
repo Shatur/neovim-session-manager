@@ -13,7 +13,13 @@ function session_manager.load_session(bang)
 
   local display_names = {}
   for _, session in ipairs(sessions) do
-    table.insert(display_names, session.dir.filename)
+    if config.max_path_length and #session.dir.filename > config.max_path_length then
+      -- Shorten path if length exceeds defined max_path_length
+      table.insert(display_names, Path:new(session.dir.filename):shorten())
+    else
+      -- Original path
+      table.insert(display_names, session.dir.filename)
+    end
   end
 
   vim.ui.select(display_names, { prompt = 'Load session' }, function(_, idx)
@@ -59,7 +65,13 @@ function session_manager.delete_session()
 
   local display_names = {}
   for _, session in ipairs(sessions) do
-    table.insert(display_names, session.dir.filename)
+    if config.max_path_length and #session.dir.filename > config.max_path_length then
+      -- Shorten path if length exceeds defined max_path_length
+      table.insert(display_names, Path:new(session.dir.filename):shorten())
+    else
+      -- Original path
+      table.insert(display_names, session.dir.filename)
+    end
   end
 
   vim.ui.select(display_names, { prompt = 'Delete session' }, function(_, idx)
