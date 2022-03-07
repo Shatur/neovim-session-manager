@@ -8,18 +8,22 @@ function session_manager.setup(values)
   setmetatable(config, { __index = vim.tbl_extend('force', config.defaults, values) })
 end
 
+local function shorten_path(filename)
+  -- Shorten path if length exceeds defined max_path_length
+  if config.max_path_length > 0 and #filename > config.max_path_length then
+    return Path:new(filename):shorten()
+  end
+
+  -- Otherwise, use original path
+  return filename
+end
+
 function session_manager.load_session(bang)
   local sessions = utils.get_sessions()
 
   local display_names = {}
   for _, session in ipairs(sessions) do
-    if config.max_path_length and #session.dir.filename > config.max_path_length then
-      -- Shorten path if length exceeds defined max_path_length
-      table.insert(display_names, Path:new(session.dir.filename):shorten())
-    else
-      -- Original path
-      table.insert(display_names, session.dir.filename)
-    end
+    table.insert(display_names, shorten_path(session.dir.filename))
   end
 
   vim.ui.select(display_names, { prompt = 'Load session' }, function(_, idx)
@@ -65,13 +69,7 @@ function session_manager.delete_session()
 
   local display_names = {}
   for _, session in ipairs(sessions) do
-    if config.max_path_length and #session.dir.filename > config.max_path_length then
-      -- Shorten path if length exceeds defined max_path_length
-      table.insert(display_names, Path:new(session.dir.filename):shorten())
-    else
-      -- Original path
-      table.insert(display_names, session.dir.filename)
-    end
+    table.insert(display_names, shorten_path(session.dir.filename))
   end
 
   vim.ui.select(display_names, { prompt = 'Delete session' }, function(_, idx)

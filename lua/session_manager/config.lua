@@ -20,7 +20,7 @@ config.defaults = {
     'gitcommit',
   },
   autosave_only_in_session = false,
-  max_path_length = 80,  -- use nil if don't want to shorten the path at all
+  max_path_length = 80,
 }
 
 setmetatable(config, { __index = config.defaults })
