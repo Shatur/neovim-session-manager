@@ -60,7 +60,7 @@ function utils.load_session(filename, discard_current)
     utils.is_session = true
     vim.api.nvim_command('doautocmd User SessionLoadPre')
     vim.api.nvim_command('silent source ' .. filename)
-    vim.cmd[[doautocmd User SessionLoadPost]]
+    vim.cmd('doautocmd User SessionLoadPost')
   end)
 end
 
