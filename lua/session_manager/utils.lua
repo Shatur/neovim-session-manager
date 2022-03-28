@@ -83,7 +83,7 @@ function utils.save_session(filename)
   end
 
   utils.is_session = true
-  vim.cmd[[doautocmd User SessionSavePre]]
+  vim.cmd('doautocmd User SessionSavePre')
   vim.api.nvim_command('mksession! ' .. filename)
   vim.cmd[[doautocmd User SessionSavePost]]
 end
