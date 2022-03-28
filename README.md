@@ -44,3 +44,25 @@ require('session_manager').setup({
   max_path_length = 80,  -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
 })
 ```
+
+## Autocommands
+
+The plugin supports user configurable autocmd using vim's very own User event feature. You can specify commands to be executed automatically after saving or loading a session. Use these like any other built in vim autocmd events.
+
+| Event                | Description                        |
+| -------------------- | ---------------------------------- |
+| User SessionSavePost | Executed after a session is saved  |
+| User SessionLoadPost | Executed after a session is loaded |
+
+For example, if you would like to have NvimTree or any other file tree automatically opened after a session load, have this somewhere in your config file:
+
+```lua
+-- open NvimTree without focusing the explorer
+-- you can put this line in session manager's setup configuration, in your init.lua, or anywhere as long as it is called
+vim.cmd('autocmd User SessionLoadPost lua require"nvim-tree".toggle(false, true)')
+```
+
+For more information about autocmd and its event, see also:
+- [`:help autocmd`](https://neovim.io/doc/user/autocmd.html)
+- [`:help events`](https://neovim.io/doc/user/autocmd.html#events)
+- [`:help User`](https://neovim.io/doc/user/autocmd.html#User)
