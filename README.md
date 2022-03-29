@@ -49,8 +49,8 @@ require('session_manager').setup({
 
 You can specify commands to be executed automatically after saving or loading a session using the following events:
 
-| Event                | Description                        |
-| -------------------- | ---------------------------------- |
+| Event           | Description                        |
+| --------------- | ---------------------------------- |
 | SessionSavePost | Executed after a session is saved  |
 | SessionLoadPost | Executed after a session is loaded |
 
