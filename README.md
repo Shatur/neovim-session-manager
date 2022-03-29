@@ -47,7 +47,7 @@ require('session_manager').setup({
 
 ## Autocommands
 
-The plugin supports user configurable autocmd using vim's very own User event feature. You can specify commands to be executed automatically after saving or loading a session. Use these like any other built in vim autocmd events.
+You can specify commands to be executed automatically after saving or loading a session using the following events:
 
 | Event                | Description                        |
 | -------------------- | ---------------------------------- |
