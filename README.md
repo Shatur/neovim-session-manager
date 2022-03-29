@@ -51,8 +51,8 @@ You can specify commands to be executed automatically after saving or loading a 
 
 | Event                | Description                        |
 | -------------------- | ---------------------------------- |
-| User SessionSavePost | Executed after a session is saved  |
-| User SessionLoadPost | Executed after a session is loaded |
+| SessionSavePost | Executed after a session is saved  |
+| SessionLoadPost | Executed after a session is loaded |
 
 For example, if you would like to have NvimTree or any other file tree automatically opened after a session load, have this somewhere in your config file:
 
