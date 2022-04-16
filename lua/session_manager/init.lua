@@ -18,7 +18,7 @@ local function shorten_path(filename)
   return filename
 end
 
-function session_manager.load_session(bang)
+function session_manager.load_session(discard_current)
   local sessions = utils.get_sessions()
 
   local display_names = {}
@@ -31,22 +31,22 @@ function session_manager.load_session(bang)
       if config.autosave_last_session and (not config.autosave_ignore_not_normal or utils.is_restorable_buffer_present()) then
         session_manager.save_current_session()
       end
-      utils.load_session(sessions[idx].filename, bang and #bang ~= 0)
+      utils.load_session(sessions[idx].filename, discard_current)
     end
   end)
 end
 
-function session_manager.load_last_session(bang)
+function session_manager.load_last_session(discard_current)
   local last_session = utils.get_last_session_filename()
   if last_session then
-    utils.load_session(last_session, bang and #bang ~= 0)
+    utils.load_session(last_session, discard_current)
   end
 end
 
-function session_manager.load_current_dir_session(bang)
+function session_manager.load_current_dir_session(discard_current)
   local session_name = utils.dir_to_session_filename(vim.loop.cwd())
   if session_name:exists() then
-    utils.load_session(session_name.filename, bang and #bang ~= 0)
+    utils.load_session(session_name.filename, discard_current)
   end
 end
 

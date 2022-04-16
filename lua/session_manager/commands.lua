@@ -12,13 +12,13 @@ function commands.match_commands(arg)
   return matches
 end
 
-function commands.run_command(command, bang)
-  local command_func = session_manager[command]
+function commands.run_command(command)
+  local command_func = session_manager[command.args]
   if not command_func then
     utils.notify('No such command: ' .. command, vim.log.levels.ERROR)
     return
   end
-  command_func(bang)
+  command_func(command.bang)
 end
 
 return commands
