@@ -88,6 +88,10 @@ function session_manager.autosave_session()
     return
   end
 
+  if not config.autosave_if_argc and vim.fn.argc() ~= 0 then
+    return
+  end
+
   if not config.autosave_ignore_not_normal or utils.is_restorable_buffer_present() then
     session_manager.save_current_session()
   end

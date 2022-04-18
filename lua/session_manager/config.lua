@@ -20,6 +20,7 @@ config.defaults = {
     'gitcommit',
   },
   autosave_only_in_session = false,
+  autosave_if_argc = false,
   max_path_length = 80,
 }
 
