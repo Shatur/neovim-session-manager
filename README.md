@@ -57,9 +57,14 @@ You can specify commands to be executed automatically after saving or loading a 
 For example, if you would like to have NvimTree or any other file tree automatically opened after a session load, have this somewhere in your config file:
 
 ```lua
--- open NvimTree without focusing the explorer
--- you can put this line in session manager's setup configuration, in your init.lua, or anywhere as long as it is called
-vim.cmd('autocmd User SessionLoadPost lua require"nvim-tree".toggle(false, true)')
+local config_group = vim.api.nvim_create_augroup('MyConfigGroup', {}) -- A global group for all your config autocommands
+
+vim.api.nvim_create_autocmd({ 'SessionLoadPost' }, {
+  group = config_group,
+  callback = function()
+    require('nvim-tree').toggle(false, true)
+  end,
+})
 ```
 
 For more information about autocmd and its event, see also:
