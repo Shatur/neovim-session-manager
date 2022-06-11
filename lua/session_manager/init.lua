@@ -28,9 +28,7 @@ function session_manager.load_session(discard_current)
 
   vim.ui.select(display_names, { prompt = 'Load session' }, function(_, idx)
     if idx then
-      if config.autosave_last_session and (not config.autosave_ignore_not_normal or utils.is_restorable_buffer_present()) then
-        session_manager.save_current_session()
-      end
+      session_manager.autosave_session()
       utils.load_session(sessions[idx].filename, discard_current)
     end
   end)
