@@ -73,8 +73,8 @@ function session_manager.delete_session()
   vim.ui.select(display_names, { prompt = 'Delete session' }, function(_, idx)
     if idx then
       Path:new(sessions[idx].filename):rm()
+      session_manager.delete_session()
     end
-    session_manager.delete_session()
   end)
 end
 
