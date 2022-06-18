@@ -3,14 +3,10 @@ if not vim.fn.has('nvim-0.7.0') then
   return
 end
 
-local session_manager_commands = require('session_manager.commands')
+local subcommands = require('session_manager.subcommands')
 local session_manager = require('session_manager')
 
-vim.api.nvim_create_user_command(
-  'SessionManager',
-  session_manager_commands.run_command,
-  { nargs = 1, bang = true, complete = session_manager_commands.match_commands, desc = 'Run session manager command' }
-)
+vim.api.nvim_create_user_command('SessionManager', subcommands.run, { nargs = 1, bang = true, complete = subcommands.complete, desc = 'Run session manager command' })
 
 local session_manager_group = vim.api.nvim_create_augroup('SessionManager', {})
 vim.api.nvim_create_autocmd({ 'VimEnter' }, {
