@@ -74,6 +74,7 @@ function session_manager.delete_session()
     if idx then
       Path:new(sessions[idx].filename):rm()
     end
+    session_manager.delete_session()
   end)
 end
 
