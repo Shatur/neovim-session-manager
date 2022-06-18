@@ -127,6 +127,10 @@ function utils.dir_to_session_filename(dir)
 end
 
 function utils.is_restorable(buffer)
+  if #vim.api.nvim_buf_get_option(buffer, 'bufhidden') ~= 0 then
+    return false
+  end
+
   local buftype = vim.api.nvim_buf_get_option(buffer, 'buftype')
   if #buftype == 0 then
     -- Normal buffer, check if it listed
