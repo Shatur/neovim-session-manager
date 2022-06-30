@@ -26,7 +26,7 @@ function session_manager.load_session(discard_current)
     table.insert(display_names, shorten_path(session.dir.filename))
   end
 
-  vim.ui.select(display_names, { prompt = 'Load session' }, function(_, idx)
+  vim.ui.select(display_names, { prompt = 'Load Session' }, function(_, idx)
     if idx then
       session_manager.autosave_session()
       utils.load_session(sessions[idx].filename, discard_current)
@@ -70,7 +70,7 @@ function session_manager.delete_session()
     table.insert(display_names, shorten_path(session.dir.filename))
   end
 
-  vim.ui.select(display_names, { prompt = 'Delete session' }, function(_, idx)
+  vim.ui.select(display_names, { prompt = 'Delete Session' }, function(_, idx)
     if idx then
       Path:new(sessions[idx].filename):rm()
       session_manager.delete_session()
