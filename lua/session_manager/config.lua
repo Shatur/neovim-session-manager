@@ -6,6 +6,7 @@ local config = {
     'Disabled',
     'CurrentDir',
     'LastSession',
+    'GitSession',
   }),
 }
 
@@ -13,7 +14,7 @@ config.defaults = {
   sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'),
   path_replacer = '__',
   colon_replacer = '++',
-  autoload_mode = config.AutoloadMode.LastSession,
+  autoload_mode = config.AutoloadMode.GitSession,
   autosave_last_session = true,
   autosave_ignore_not_normal = true,
   autosave_ignore_filetypes = {
