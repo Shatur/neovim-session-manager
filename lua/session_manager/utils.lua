@@ -120,7 +120,7 @@ function utils.session_filename_to_dir(filename)
 end
 
 function utils.dir_to_session_filename(dir)
-  local filename = dir and dir.filename or vim.loop.cwd()
+  local filename = dir or vim.loop.cwd()
   filename = filename:gsub(':', config.colon_replacer)
   filename = filename:gsub(Path.path.sep, config.path_replacer)
   return Path:new(config.sessions_dir):joinpath(filename)

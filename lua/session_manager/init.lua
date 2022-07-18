@@ -2,6 +2,7 @@ local config = require('session_manager.config')
 local AutoloadMode = require('session_manager.config').AutoloadMode
 local utils = require('session_manager.utils')
 local Path = require('plenary.path')
+local Job = require('plenary.job')
 local session_manager = {}
 
 function session_manager.setup(values)
@@ -42,14 +43,29 @@ function session_manager.load_last_session(discard_current)
 end
 
 function session_manager.load_current_dir_session(discard_current)
-  local session_name = utils.dir_to_session_filename(vim.loop.cwd())
+
+  local session_name = utils.dir_to_session_filename()
+  if session_name:exists() then
+    utils.load_session(session_name.filename, discard_current)
+  end
+end
+
+function session_manager.load_current_git_session(discard_current)
+  local job = Job:new({
+    command = "git",
+    args = { "rev-parse", "--show-toplevel" },
+  })
+  job:sync()
+  dir_global = job:result()[1] or vim.loop.cwd() 
+
+  local session_name = utils.dir_to_session_filename(dir_global)
   if session_name:exists() then
     utils.load_session(session_name.filename, discard_current)
   end
 end
 
 function session_manager.save_current_session()
-  utils.save_session(utils.dir_to_session_filename().filename)
+  utils.save_session(utils.dir_to_session_filename(dir_global).filename)
 end
 
 function session_manager.autoload_session()
@@ -58,6 +74,8 @@ function session_manager.autoload_session()
       session_manager.load_current_dir_session()
     elseif config.autoload_mode == AutoloadMode.LastSession then
       session_manager.load_last_session()
+    elseif config.autoload_mode == AutoloadMode.GitSession then
+      session_manager.load_current_git_session()
     end
   end
 end
