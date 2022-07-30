@@ -20,7 +20,5 @@ vim.api.nvim_create_autocmd({ 'VimLeavePre' }, {
 })
 vim.api.nvim_create_autocmd({ 'StdinReadPre' }, {
   group = session_manager_group,
-  callback = function()
-    vim.g.started_with_stdin = true
-  end,
+  callback = function() vim.g.started_with_stdin = true end,
 })

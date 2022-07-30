@@ -3,9 +3,7 @@ local scandir = require('plenary.scandir')
 local Path = require('plenary.path')
 local utils = { is_session = false }
 
-function utils.notify(msg, log_level)
-  vim.notify(msg, log_level, { title = 'Session manager' })
-end
+function utils.notify(msg, log_level) vim.notify(msg, log_level, { title = 'Session manager' }) end
 
 function utils.get_last_session_filename()
   if not Path:new(config.sessions_dir):is_dir() then
@@ -98,9 +96,7 @@ function utils.get_sessions()
       Path:new(session_filename):rm()
     end
   end
-  table.sort(sessions, function(a, b)
-    return a.timestamp > b.timestamp
-  end)
+  table.sort(sessions, function(a, b) return a.timestamp > b.timestamp end)
 
   -- If the last session is the current one, then preselect the previous one
   if #sessions >= 2 and sessions[1].filename == utils.dir_to_session_filename().filename then

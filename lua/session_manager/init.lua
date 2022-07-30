@@ -4,9 +4,7 @@ local utils = require('session_manager.utils')
 local Path = require('plenary.path')
 local session_manager = {}
 
-function session_manager.setup(values)
-  setmetatable(config, { __index = vim.tbl_extend('force', config.defaults, values) })
-end
+function session_manager.setup(values) setmetatable(config, { __index = vim.tbl_extend('force', config.defaults, values) }) end
 
 local function shorten_path(filename)
   -- Shorten path if length exceeds defined max_path_length
@@ -48,9 +46,7 @@ function session_manager.load_current_dir_session(discard_current)
   end
 end
 
-function session_manager.save_current_session()
-  utils.save_session(utils.dir_to_session_filename().filename)
-end
+function session_manager.save_current_session() utils.save_session(utils.dir_to_session_filename().filename) end
 
 function session_manager.autoload_session()
   if config.autoload_mode ~= AutoloadMode.Disabled and vim.fn.argc() == 0 and not vim.g.started_with_stdin then
