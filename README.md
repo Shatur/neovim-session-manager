@@ -59,7 +59,8 @@ For example, if you would like to have NvimTree or any other file tree automatic
 ```lua
 local config_group = vim.api.nvim_create_augroup('MyConfigGroup', {}) -- A global group for all your config autocommands
 
-vim.api.nvim_create_autocmd({ 'SessionLoadPost' }, {
+vim.api.nvim_create_autocmd({ 'User' }, {
+  pattern = "SessionLoadPost",
   group = config_group,
   callback = function()
     require('nvim-tree').toggle(false, true)
