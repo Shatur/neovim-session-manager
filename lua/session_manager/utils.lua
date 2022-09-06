@@ -56,6 +56,7 @@ function utils.load_session(filename, discard_current)
     vim.api.nvim_buf_delete(current_buffer, { force = true })
 
     utils.is_session = true
+    vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPre' })
     vim.api.nvim_command('silent source ' .. filename)
     vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPost' })
   end)
@@ -80,6 +81,7 @@ function utils.save_session(filename)
   end
 
   utils.is_session = true
+  vim.api.nvim_exec_autocmds('User', { pattern = 'SessionSavePre' })
   vim.api.nvim_command('mksession! ' .. filename)
   vim.api.nvim_exec_autocmds('User', { pattern = 'SessionSavePost' })
 end
