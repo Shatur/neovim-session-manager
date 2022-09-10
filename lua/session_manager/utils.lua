@@ -3,8 +3,12 @@ local scandir = require('plenary.scandir')
 local Path = require('plenary.path')
 local utils = { is_session = false }
 
+--- A small wrapper around `vim.notify` that adds plugin title.
+---@param msg string
+---@param log_level number
 function utils.notify(msg, log_level) vim.notify(msg, log_level, { title = 'Session manager' }) end
 
+---@return string?: Last used session filename.
 function utils.get_last_session_filename()
   if not Path:new(config.sessions_dir):is_dir() then
     utils.notify('Sessions list is empty', vim.log.levels.INFO)
@@ -25,14 +29,16 @@ function utils.get_last_session_filename()
   return most_recent_filename
 end
 
+---@param filename string
+---@param discard_current boolean
 function utils.load_session(filename, discard_current)
   if not discard_current then
-    -- Ask to save files in current session before closing them
+    -- Ask to save files in current session before closing them.
     for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
       if vim.api.nvim_buf_get_option(buffer, 'modified') then
         local choice = vim.fn.confirm('The files in the current session have changed. Save changes?', '&Yes\n&No\n&Cancel')
         if choice == 3 or choice == 0 then
-          return -- Cancel
+          return -- Cancel.
         elseif choice == 1 then
           vim.api.nvim_command('silent wall')
         end
@@ -41,12 +47,12 @@ function utils.load_session(filename, discard_current)
     end
   end
 
-  -- Stop all LSP clients first
+  -- Stop all LSP clients first.
   vim.lsp.stop_client(vim.lsp.get_active_clients())
 
-  -- Scedule buffers cleanup to avoid callback issues and source the session
+  -- Scedule buffers cleanup to avoid callback issues and source the session.
   vim.schedule(function()
-    -- Delete all buffers first except the current one to avoid entering buffers scheduled for deletion
+    -- Delete all buffers first except the current one to avoid entering buffers scheduled for deletion.
     local current_buffer = vim.api.nvim_get_current_buf()
     for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
       if vim.api.nvim_buf_is_valid(buffer) and buffer ~= current_buffer then
@@ -62,20 +68,21 @@ function utils.load_session(filename, discard_current)
   end)
 end
 
+---@param filename string
 function utils.save_session(filename)
   local sessions_dir = Path:new(tostring(config.sessions_dir))
   if not sessions_dir:is_dir() then
     sessions_dir:mkdir()
   end
 
-  -- Remove all non-file and utility buffers because they cannot be saved
+  -- Remove all non-file and utility buffers because they cannot be saved.
   for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_valid(buffer) and not utils.is_restorable(buffer) then
       vim.api.nvim_buf_delete(buffer, { force = true })
     end
   end
 
-  -- Clear all passed arguments to avoid re-executing them
+  -- Clear all passed arguments to avoid re-executing them.
   if vim.fn.argc() > 0 then
     vim.api.nvim_command('%argdel')
   end
@@ -86,6 +93,7 @@ function utils.save_session(filename)
   vim.api.nvim_exec_autocmds('User', { pattern = 'SessionSavePost' })
 end
 
+---@return table
 function utils.get_sessions()
   local sessions = {}
   for _, session_filename in ipairs(scandir.scan_dir(tostring(config.sessions_dir))) do
@@ -98,7 +106,7 @@ function utils.get_sessions()
   end
   table.sort(sessions, function(a, b) return a.timestamp > b.timestamp end)
 
-  -- If the last session is the current one, then preselect the previous one
+  -- If the last session is the current one, then preselect the previous one.
   if #sessions >= 2 and sessions[1].filename == utils.dir_to_session_filename().filename then
     sessions[1], sessions[2] = sessions[2], sessions[1]
   end
@@ -106,8 +114,11 @@ function utils.get_sessions()
   return sessions
 end
 
+--- Replaces symbols into separators and colons to transform filename into a session directory.
+---@param filename string: Filename with expressions to replace.
+---@return table: Session directory
 function utils.session_filename_to_dir(filename)
-  -- Get session filename
+  -- Get session filename.
   local dir = filename:sub(#tostring(config.sessions_dir) + 2)
 
   dir = dir:gsub(config.colon_replacer, ':')
@@ -115,6 +126,9 @@ function utils.session_filename_to_dir(filename)
   return Path:new(dir)
 end
 
+--- Replaces separators and colons into special symbols to transform session directory into a filename.
+---@param dir table?: Path to session directory. Defaults to the current working directory if `nil`.
+---@return table: Session filename.
 function utils.dir_to_session_filename(dir)
   local filename = dir and dir.filename or vim.loop.cwd()
   filename = filename:gsub(':', config.colon_replacer)
@@ -122,6 +136,8 @@ function utils.dir_to_session_filename(dir)
   return Path:new(config.sessions_dir):joinpath(filename)
 end
 
+---@param buffer number: buffer ID.
+---@return boolean: `true` if this buffer could be restored later on loading.
 function utils.is_restorable(buffer)
   if #vim.api.nvim_buf_get_option(buffer, 'bufhidden') ~= 0 then
     return false
@@ -129,12 +145,12 @@ function utils.is_restorable(buffer)
 
   local buftype = vim.api.nvim_buf_get_option(buffer, 'buftype')
   if #buftype == 0 then
-    -- Normal buffer, check if it listed
+    -- Normal buffer, check if it listed.
     if not vim.api.nvim_buf_get_option(buffer, 'buflisted') then
       return false
     end
   elseif buftype ~= 'terminal' then
-    -- Buffers other then normal or terminal are impossible to restore
+    -- Buffers other then normal or terminal are impossible to restore.
     return false
   end
 
@@ -144,6 +160,7 @@ function utils.is_restorable(buffer)
   return true
 end
 
+---@return boolean
 function utils.is_restorable_buffer_present()
   for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_valid(buffer) and utils.is_restorable(buffer) then
@@ -151,6 +168,18 @@ function utils.is_restorable_buffer_present()
     end
   end
   return false
+end
+
+---@param filename string
+---@return string
+function utils.shorten_path(filename)
+  -- Shorten path if length exceeds defined max_path_length.
+  if config.max_path_length > 0 and #filename > config.max_path_length then
+    return Path:new(filename):shorten()
+  end
+
+  -- Otherwise, use original path.
+  return filename
 end
 
 return utils
