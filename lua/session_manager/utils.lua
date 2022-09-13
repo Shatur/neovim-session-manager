@@ -149,6 +149,10 @@ function utils.is_restorable(buffer)
     if not vim.api.nvim_buf_get_option(buffer, 'buflisted') then
       return false
     end
+    -- Check if it has a filename.
+    if #vim.api.nvim_buf_get_name(buffer) == 0 then
+      return false
+    end
   elseif buftype ~= 'terminal' then
     -- Buffers other then normal or terminal are impossible to restore.
     return false
