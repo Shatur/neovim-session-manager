@@ -21,6 +21,7 @@ config.defaults = {
   },
   autosave_only_in_session = false,
   max_path_length = 80,
+  stop_lsp_on_session_load = true,
 }
 
 setmetatable(config, { __index = config.defaults })
