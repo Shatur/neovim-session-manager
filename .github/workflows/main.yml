@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Clone repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Luacheck
         uses: nebularg/actions-luacheck@v1
@@ -27,10 +27,10 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Clone repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: StyLua
-        uses: JohnnyMorganz/stylua-action@1.0.0
+        uses: JohnnyMorganz/stylua-action@v1.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --color always --check .
