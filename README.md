@@ -42,7 +42,7 @@ require('session_manager').setup({
   },
   autosave_only_in_session = false, -- Always autosaves session. If true, only autosaves after a session is active.
   max_path_length = 80,  -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
-  stop_lsp_on_session_load = true, -- Stop LSP servers after loading a session.
+  stop_lsp_on_session_load = false, -- Stop LSP servers after loading a session.
 })
 ```
 
