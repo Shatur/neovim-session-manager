@@ -48,7 +48,9 @@ function utils.load_session(filename, discard_current)
   end
 
   -- Stop all LSP clients first.
-  vim.lsp.stop_client(vim.lsp.get_active_clients())
+  if config.stop_lsp_on_session_load then
+    vim.lsp.stop_client(vim.lsp.get_active_clients())
+  end
 
   -- Scedule buffers cleanup to avoid callback issues and source the session.
   vim.schedule(function()
