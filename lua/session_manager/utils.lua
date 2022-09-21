@@ -49,10 +49,6 @@ function utils.load_session(filename, discard_current)
 
   -- Scedule buffers cleanup to avoid callback issues and source the session.
   vim.schedule(function()
-    -- Stop all LSP clients first.
-    if config.stop_lsp_on_session_load then
-      vim.lsp.stop_client(vim.lsp.get_active_clients())
-    end
     -- Delete all buffers first except the current one to avoid entering buffers scheduled for deletion.
     local current_buffer = vim.api.nvim_get_current_buf()
     for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
