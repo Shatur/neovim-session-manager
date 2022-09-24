@@ -61,6 +61,24 @@ function utils.load_session(filename, discard_current)
     utils.is_session = true
     vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPre' })
     vim.api.nvim_command('silent source ' .. filename)
+    -- close unused lsp clients
+    local bufs = vim.api.nvim_list_bufs()
+    local lsp_clients = vim.lsp.get_active_clients()
+    for _, cli in pairs(lsp_clients) do
+      if cli.config.root_dir ~= vim.fn.getcwd() then
+        local active = false
+        for _, bufnr in pairs(bufs) do
+          for key, _ in pairs(cli.attached_buffers) do
+            if key == bufnr then
+              active = true
+            end
+          end
+        end
+        if active == false then
+          vim.lsp.stop_client(cli.id)
+        end
+      end
+    end
     vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPost' })
   end)
 end
