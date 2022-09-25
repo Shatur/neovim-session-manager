@@ -80,8 +80,8 @@ function utils.load_session(filename, discard_current)
     utils.is_session = true
     vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPre' })
     vim.api.nvim_command('silent source ' .. filename)
-    close_unused_lsp_clients()
     vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPost' })
+    close_unused_lsp_clients()
   end)
 end
 
