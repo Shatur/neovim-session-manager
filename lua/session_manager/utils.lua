@@ -64,18 +64,17 @@ function utils.load_session(filename, discard_current)
     -- close unused lsp clients
     local bufs = vim.api.nvim_list_bufs()
     local lsp_clients = vim.lsp.get_active_clients()
-    for _, cli in pairs(lsp_clients) do
-      if cli.config.root_dir ~= vim.fn.getcwd() then
+    for _, client in pairs(lsp_clients) do
+      if client.config.root_dir ~= vim.loop.cwd() then
         local active = false
         for _, bufnr in pairs(bufs) do
-          for key, _ in pairs(cli.attached_buffers) do
-            if key == bufnr then
+          if client.attached_buffers[bufnr] ~= nil then
               active = true
-            end
+              break
           end
         end
         if active == false then
-          vim.lsp.stop_client(cli.id)
+          vim.lsp.stop_client(client.id)
         end
       end
     end
