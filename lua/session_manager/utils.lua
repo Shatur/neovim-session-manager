@@ -3,8 +3,6 @@ local scandir = require('plenary.scandir')
 local Path = require('plenary.path')
 local utils = { is_session = false }
 
-
--- close unused lsp clients
 local function close_unused_lsp_clients()
   local bufs = vim.api.nvim_list_bufs()
   local lsp_clients = vim.lsp.get_active_clients()
