@@ -196,7 +196,16 @@ end
 function utils.shorten_path(filename)
   -- Shorten path if length exceeds defined max_path_length.
   if config.max_path_length > 0 and #filename > config.max_path_length then
-    return Path:new(filename):shorten()
+    local excludes = {-1}  -- index to exclude from shortening, -1 means last
+    local shortened = nil
+
+    -- Gradually increase the tailing excludes
+    while string.len(Path:new(filename):shorten(1, excludes)) < config.max_path_length do
+      shortened = Path:new(filename):shorten(1, excludes)
+      excludes[#excludes+1] = excludes[#excludes] - 1
+    end
+
+    return shortened
   end
 
   -- Otherwise, use original path.
