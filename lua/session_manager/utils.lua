@@ -196,7 +196,7 @@ end
 function utils.shorten_path(filename)
   -- Shorten path if length exceeds defined max_path_length.
   if config.max_path_length > 0 and #filename > config.max_path_length then
-    local excludes = { -1 }  -- index to exclude from shortening, -1 means last
+    local excludes = { -1 }  -- Index to exclude from shortening, -1 means last
     local shortened = nil
 
     -- Gradually increase the tailing excludes
