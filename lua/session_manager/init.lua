@@ -15,7 +15,7 @@ function session_manager.load_session(discard_current)
 
   local display_names = {}
   for _, session in ipairs(sessions) do
-    table.insert(display_names, utils.shorten_path(session.dir.filename))
+    table.insert(display_names, utils.shorten_path(session.dir))
   end
 
   vim.ui.select(display_names, { prompt = 'Load Session' }, function(_, idx)
@@ -62,7 +62,7 @@ function session_manager.delete_session()
 
   local display_names = {}
   for _, session in ipairs(sessions) do
-    table.insert(display_names, utils.shorten_path(session.dir.filename))
+    table.insert(display_names, utils.shorten_path(session.dir))
   end
 
   vim.ui.select(display_names, { prompt = 'Delete Session' }, function(_, idx)

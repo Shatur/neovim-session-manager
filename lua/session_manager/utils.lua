@@ -191,35 +191,29 @@ function utils.is_restorable_buffer_present()
   return false
 end
 
----@param filename string
+--- Partially shorten path if length exceeds defined max_path_length.
+---@param path table
 ---@return string
-function utils.shorten_path(filename)
-  -- Shorten path if length exceeds defined max_path_length.
-  if config.max_path_length > 0 and #filename > config.max_path_length then
+function utils.shorten_path(path)
+  if config.max_path_length > 0 and #path.filename > config.max_path_length then
     -- Index to exclude from shortening, -1 means last
     local excludes = { -1 }
 
-    -- Final shortened path to return, return original filename if cannot shorten
-    local shortened = filename
-
-    -- Cache the shortest version
-    local cached = Path:new(filename):shorten(1, excludes)
-
     -- Gradually increase the tailing excludes
-    while string.len(cached) < config.max_path_length do
-      -- Store the cached path
-      shortened = cached
+    local shortened = path.filename
+    local next_shortened = path:shorten(1, excludes)
+    while #next_shortened < config.max_path_length do
+      shortened = next_shortened
 
-      -- Try to cache new shortened path with more excludes
+      -- Try new shortened path with more excludes
       excludes[#excludes + 1] = excludes[#excludes] - 1
-      cached = Path:new(filename):shorten(1, excludes)
+      next_shortened = path:shorten(1, excludes)
     end
 
     return shortened
   end
 
-  -- Otherwise, use original path.
-  return filename
+  return path.filename
 end
 
 return utils
