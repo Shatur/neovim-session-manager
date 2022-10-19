@@ -16,6 +16,7 @@ config.defaults = {
   autoload_mode = config.AutoloadMode.LastSession,
   autosave_last_session = true,
   autosave_ignore_not_normal = true,
+  autosave_ignore_dirs = {},
   autosave_ignore_filetypes = {
     'gitcommit',
   },
