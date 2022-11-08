@@ -19,6 +19,7 @@ config.defaults = {
   autosave_ignore_filetypes = {
     'gitcommit',
   },
+  autosave_ignore_buftypes = {},
   autosave_only_in_session = false,
   max_path_length = 80,
 }
