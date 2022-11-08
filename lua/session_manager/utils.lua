@@ -194,9 +194,8 @@ end
 ---@return boolean
 function utils.is_dir_in_ignore_list()
   local cwd = vim.loop.cwd()
-  local function contains(dir) return vim.tbl_contains(config.autosave_ignore_dirs, dir) end
-
-  return contains(cwd) or contains(vim.fn.fnamemodify(cwd, ':~'))
+  -- Use `fnamemodify` to allow paths like `~/.config`.
+  return vim.tbl_contains(cwd) or vim.tbl_contains(vim.fn.fnamemodify(cwd, ':~'))
 end
 
 --- Partially shorten path if length exceeds defined max_path_length.
