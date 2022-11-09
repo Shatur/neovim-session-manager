@@ -175,7 +175,10 @@ function utils.is_restorable(buffer)
     return false
   end
 
-  if vim.tbl_contains(config.autosave_ignore_filetypes, vim.api.nvim_buf_get_option(buffer, 'filetype')) then
+  if
+    vim.tbl_contains(config.autosave_ignore_filetypes, vim.api.nvim_buf_get_option(buffer, 'filetype'))
+    or vim.tbl_contains(config.autosave_ignore_buftypes, vim.api.nvim_buf_get_option(buffer, 'buftype'))
+  then
     return false
   end
   return true
