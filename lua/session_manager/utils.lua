@@ -150,7 +150,7 @@ function utils.dir_to_session_filename(dir)
   local filename = dir and dir.filename or vim.loop.cwd()
   filename = filename:gsub(':', config.colon_replacer)
   filename = filename:gsub(Path.path.sep, config.path_replacer)
-  return Path:new(config.sessions_dir):joinpath(filename)
+  return Path:new(tostring(config.sessions_dir)):joinpath(filename)
 end
 
 ---@param buffer number: buffer ID.
