@@ -13,6 +13,8 @@ config.defaults = {
   sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'),
   path_replacer = '__',
   colon_replacer = '++',
+  extras_separator = '==',
+  extras_generator = function (dir) return nil end,
   autoload_mode = config.AutoloadMode.LastSession,
   autosave_last_session = true,
   autosave_ignore_not_normal = true,

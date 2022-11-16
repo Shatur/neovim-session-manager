@@ -138,6 +138,7 @@ function utils.session_filename_to_dir(filename)
   -- Get session filename.
   local dir = filename:sub(#tostring(config.sessions_dir) + 2)
 
+  dir = dir:sub(0, dir:find(config.colon_replacer))
   dir = dir:gsub(config.colon_replacer, ':')
   dir = dir:gsub(config.path_replacer, Path.path.sep)
   return Path:new(dir)
@@ -150,6 +151,12 @@ function utils.dir_to_session_filename(dir)
   local filename = dir and dir.filename or vim.loop.cwd()
   filename = filename:gsub(':', config.colon_replacer)
   filename = filename:gsub(Path.path.sep, config.path_replacer)
+
+  local extras = config.extras_generator(dir)
+  if extras ~= nil then
+    filename = filename .. config.extras_separator .. extras
+  end
+
   return Path:new(config.sessions_dir):joinpath(filename)
 end
 
