@@ -135,28 +135,16 @@ end
 ---@param filename string: Filename with expressions to replace.
 ---@return table: Session directory
 function utils.session_filename_to_dir(filename)
-  -- Get session filename.
-  local dir = filename:sub(#tostring(config.sessions_dir) + 2)
-
-  dir = dir:sub(0, dir:find(config.colon_replacer))
-  dir = dir:gsub(config.colon_replacer, ':')
-  dir = dir:gsub(config.path_replacer, Path.path.sep)
-  return Path:new(dir)
+  filename = filename:sub(#tostring(config.sessions_dir) + 2)
+  return Path:new(config.session_filename_to_dir(filename))
 end
 
 --- Replaces separators and colons into special symbols to transform session directory into a filename.
 ---@param dir table?: Path to session directory. Defaults to the current working directory if `nil`.
 ---@return table: Session filename.
 function utils.dir_to_session_filename(dir)
-  local filename = dir and dir.filename or vim.loop.cwd()
-  filename = filename:gsub(':', config.colon_replacer)
-  filename = filename:gsub(Path.path.sep, config.path_replacer)
-
-  local extras = config.extras_generator(dir)
-  if extras ~= nil then
-    filename = filename .. config.extras_separator .. extras
-  end
-
+  dir = dir and dir.filename or vim.loop.cwd()
+  local filename = config.dir_to_session_filename(dir)
   return Path:new(config.sessions_dir):joinpath(filename)
 end
 
