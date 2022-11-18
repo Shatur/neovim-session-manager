@@ -14,7 +14,6 @@ local config = {
 ---@return string: Session directory
 function config.delimited_session_filename_to_dir(filename)
   local dir = filename
-  dir = dir:sub(0, dir:find(config.colon_replacer))
   dir = dir:gsub(config.colon_replacer, ':')
   dir = dir:gsub(config.path_replacer, Path.path.sep)
   return dir
@@ -27,12 +26,6 @@ function config.dir_to_delimited_session_filename(dir)
   local filename = dir
   filename = filename:gsub(':', config.colon_replacer)
   filename = filename:gsub(Path.path.sep, config.path_replacer)
-
-  local extras = config.extras_generator(dir)
-  if extras ~= nil then
-    filename = filename .. config.extras_separator .. extras
-  end
-
   return filename
 end
 
@@ -42,8 +35,6 @@ config.defaults = {
   colon_replacer = '++',
   dir_to_session_filename = config.dir_to_delimited_session_filename,
   session_filename_to_dir = config.delimited_session_filename_to_dir,
-  extras_separator = '==',
-  extras_generator = function (dir) return nil end,
   autoload_mode = config.AutoloadMode.LastSession,
   autosave_last_session = true,
   autosave_ignore_not_normal = true,
