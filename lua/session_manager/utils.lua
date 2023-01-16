@@ -49,7 +49,7 @@ function utils.get_last_session_filename()
 end
 
 ---@param filename string
----@param discard_current boolean
+---@param discard_current boolean?
 function utils.load_session(filename, discard_current)
   if not discard_current then
     -- Ask to save files in current session before closing them.
