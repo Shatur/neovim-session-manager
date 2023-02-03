@@ -72,9 +72,10 @@ vim.api.nvim_create_autocmd({ 'User' }, {
 })
 ```
 
-### Save session on save buffer
+## Save session on save buffer
 
-Save session every time a buffer is written
+Example how to save session every time a buffer is written:
+
 ```lua
 vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
   group = config_group,
