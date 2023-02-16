@@ -32,6 +32,8 @@ To configure the plugin, you can call `require('session_manager').setup(values)`
 local Path = require('plenary.path')
 require('session_manager').setup({
   sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'), -- The directory where the session files will be saved.
+  dir_to_session_filename = require('session_manager.config').dir_to_delimited_session_filename, -- The function that converts a working directory to a session filename
+  session_filename_to_dir = require('session_manager.config').delimited_session_filename_to_dir, -- The function that converts a session filename to a working directory
   autoload_mode = require('session_manager.config').AutoloadMode.LastSession, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
   autosave_last_session = true, -- Automatically save last session on exit and on session switch.
   autosave_ignore_not_normal = true, -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
@@ -40,6 +42,49 @@ require('session_manager').setup({
   },
   autosave_only_in_session = false, -- Always autosaves session. If true, only autosaves after a session is active.
   max_path_length = 80,  -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
+})
+```
+
+### Unique Sessions for each Git Branch
+
+When working in a git repo with multiple branches, it can be convenient to have a separate session for each branch.
+
+This can be achieved by defining the `dir_to_session_filename` and `session_filename_to_dir` functions.
+
+```lua
+local session_manager = require('session_manager')
+local sm_config = require('session_manager.config')
+
+local function get_branch_name()
+  local handle = io.popen("git branch --show-current 2>/dev/null")
+    if (handle == nil) then
+      return nil
+  end
+  local branch = handle:read("l")
+  handle:close()
+  if (branch == nil) then
+    return nil
+  end
+  branch = branch:gsub("/", "--")
+  return branch
+end
+
+session_manager.setup({
+  -- ... other configuration
+  dir_to_session_filename = function(dir)
+    local filename = sm_config.dir_to_delimited_session_filename(dir)
+	-- add the git branch name to the filename if we are in a git repo
+    local branch = get_branch_name()
+    if branch ~= nil then
+      return filename .. "==" .. branch
+	  else
+      return filename
+    end
+  end,
+  session_filename_to_dir = function(filename)
+    local filename_without_extra = filename:sub(0, filename:find("=="))
+    return sm_config.delimited_session_filename_to_dir(filename_without_extra)
+  end,
 })
 ```
 
