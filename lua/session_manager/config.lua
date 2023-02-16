@@ -9,13 +9,16 @@ local config = {
   }),
 }
 
+local PATH_REPLACER = '__'
+local COLON_REPLACER = '++'
+
 --- Replaces symbols into separators and colons to transform filename into a session directory.
 ---@param filename string: Filename with expressions to replace.
 ---@return string: Session directory
 function config.delimited_session_filename_to_dir(filename)
   local dir = filename
-  dir = dir:gsub(config.colon_replacer, ':')
-  dir = dir:gsub(config.path_replacer, Path.path.sep)
+  dir = dir:gsub(COLON_REPLACER, ':')
+  dir = dir:gsub(PATH_REPLACER, Path.path.sep)
   return dir
 end
 
@@ -24,15 +27,13 @@ end
 ---@return string: Session filename.
 function config.dir_to_delimited_session_filename(dir)
   local filename = dir
-  filename = filename:gsub(':', config.colon_replacer)
-  filename = filename:gsub(Path.path.sep, config.path_replacer)
+  filename = filename:gsub(':', COLON_REPLACER)
+  filename = filename:gsub(Path.path.sep, PATH_REPLACER)
   return filename
 end
 
 config.defaults = {
   sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'),
-  path_replacer = '__',
-  colon_replacer = '++',
   dir_to_session_filename = config.dir_to_delimited_session_filename,
   session_filename_to_dir = config.delimited_session_filename_to_dir,
   autoload_mode = config.AutoloadMode.LastSession,
