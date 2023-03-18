@@ -87,6 +87,26 @@ vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
 })
 ```
 
+## Telescope integration
+
+> configure
+
+```lua
+-- telescope config
+local telescope = require("telescope")
+
+-- Make sure session_manager is installed
+local ok, session_manager = pcall(require, "session_manager")
+if ok then
+  telescope.load_extension("session_manager")
+end
+```
+
+> use
+
+- `:Telescope session_manager load`: search sessions to load
+- `:Telescope session_manager delete`: search sessions to delete
+
 For more information about autocmd and its event, see also:
 
 - [`:help autocmd`](https://neovim.io/doc/user/autocmd.html)
