@@ -17,7 +17,7 @@ function subcommands.complete(arg, cmd_line)
 
   if #words == 1 then
     for subcommand in pairs(session_manager) do
-      if vim.startswith(subcommand, arg) and not vim.startswith(subcommand, 'auto') and subcommand ~= 'setup' then
+      if vim.startswith(subcommand, arg) and not vim.startswith(subcommand, 'auto') and subcommand ~= 'setup' and subcommand ~= 'delete_session_by_dir' then
         table.insert(matches, subcommand)
       end
     end

@@ -73,6 +73,17 @@ function session_manager.delete_session()
   end)
 end
 
+--- Delete a session by its directory. Used by third-party plugins
+function session_manager.delete_session_by_dir(path)
+  local sessions = utils.get_sessions()
+
+  for idx, session in ipairs(sessions) do
+    if session.dir.filename == path then
+      return Path:new(sessions[idx].filename):rm()
+    end
+  end
+end
+
 --- Saves a session based on settings. Executed before exiting the editor.
 function session_manager.autosave_session()
   if not config.autosave_last_session then
