@@ -1,6 +1,9 @@
 local Path = require('plenary.path')
 local Enum = require('plenary.enum')
 
+local path_replacer = '__'
+local colon_replacer = '++'
+
 local config = {
   AutoloadMode = Enum({
     'Disabled',
@@ -9,10 +12,32 @@ local config = {
   }),
 }
 
+--- Replaces symbols into separators and colons to transform filename into a session directory.
+---@param filename string: Filename with expressions to replace.
+---@return table: Session directory
+local function session_filename_to_dir(filename)
+  -- Get session filename.
+  local dir = filename:sub(#tostring(config.sessions_dir) + 2)
+
+  dir = dir:gsub(colon_replacer, ':')
+  dir = dir:gsub(path_replacer, Path.path.sep)
+  return Path:new(dir)
+end
+
+--- Replaces separators and colons into special symbols to transform session directory into a filename.
+---@param dir table?: Path to session directory. Defaults to the current working directory if `nil`.
+---@return table: Session filename.
+local function dir_to_session_filename(dir)
+  local filename = dir and dir.filename or vim.loop.cwd()
+  filename = filename:gsub(':', colon_replacer)
+  filename = filename:gsub(Path.path.sep, path_replacer)
+  return Path:new(config.sessions_dir):joinpath(filename)
+end
+
 config.defaults = {
   sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'),
-  path_replacer = '__',
-  colon_replacer = '++',
+  session_filename_to_dir = session_filename_to_dir,
+  dir_to_session_filename = dir_to_session_filename,
   autoload_mode = config.AutoloadMode.LastSession,
   autosave_last_session = true,
   autosave_ignore_not_normal = true,
