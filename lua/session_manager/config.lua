@@ -44,6 +44,7 @@ config.defaults = {
   autosave_ignore_dirs = {},
   autosave_ignore_filetypes = {
     'gitcommit',
+    'gitrebase',
   },
   autosave_ignore_buftypes = {},
   autosave_only_in_session = false,
