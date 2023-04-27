@@ -40,6 +40,7 @@ require('session_manager').setup({
   autosave_ignore_dirs = {}, -- A list of directories where the session will not be autosaved.
   autosave_ignore_filetypes = { -- All buffers of these file types will be closed before the session is saved.
     'gitcommit',
+    'gitrebase',
   },
   autosave_ignore_buftypes = {}, -- All buffers of these bufer types will be closed before the session is saved.
   autosave_only_in_session = false, -- Always autosaves session. If true, only autosaves after a session is active.
@@ -82,6 +83,7 @@ vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
   callback = function ()
     if vim.bo.filetype ~= 'git'
       and not vim.bo.filetype ~= 'gitcommit'
+      and not vim.bo.filetype ~= 'gitrebase'
       then session_manager.autosave_session() end
   end
 })
