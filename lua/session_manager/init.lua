@@ -37,14 +37,22 @@ end
 
 --- Loads a session for the current working directory.
 function session_manager.load_current_dir_session(discard_current)
-  local session_name = config.dir_to_session_filename(vim.loop.cwd())
-  if session_name:exists() then
-    utils.load_session(session_name.filename, discard_current)
+  local cwd = vim.loop.cwd()
+  if cwd then
+    local session = config.dir_to_session_filename(cwd)
+    if session:exists() then
+      utils.load_session(session.filename, discard_current)
+    end
   end
 end
 
 --- Saves a session for the current working directory.
-function session_manager.save_current_session() utils.save_session(config.dir_to_session_filename().filename) end
+function session_manager.save_current_session()
+  local cwd = vim.loop.cwd()
+  if cwd then
+    utils.save_session(config.dir_to_session_filename(cwd).filename)
+  end
+end
 
 --- Loads a session based on settings. Executed after starting the editor.
 function session_manager.autoload_session()

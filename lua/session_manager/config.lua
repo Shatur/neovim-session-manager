@@ -25,11 +25,10 @@ local function session_filename_to_dir(filename)
 end
 
 --- Replaces separators and colons into special symbols to transform session directory into a filename.
----@param dir table?: Path to session directory. Defaults to the current working directory if `nil`.
+---@param dir string: Path to session directory.
 ---@return table: Session filename.
 local function dir_to_session_filename(dir)
-  local filename = dir and dir.filename or vim.loop.cwd()
-  filename = filename:gsub(':', colon_replacer)
+  local filename = dir:gsub(':', colon_replacer)
   filename = filename:gsub(Path.path.sep, path_replacer)
   return Path:new(config.sessions_dir):joinpath(filename)
 end
