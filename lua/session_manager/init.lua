@@ -67,15 +67,16 @@ end
 
 function session_manager.delete_session()
   local sessions = utils.get_sessions()
-
-  local display_names = {}
-  for _, session in ipairs(sessions) do
-    table.insert(display_names, utils.shorten_path(session.dir))
-  end
-
-  vim.ui.select(display_names, { prompt = 'Delete Session' }, function(_, idx)
-    if idx then
-      Path:new(sessions[idx].filename):rm()
+  vim.ui.select(sessions, {
+    prompt = 'Delete Session',
+    format_item = function(item) return utils.shorten_path(item.dir) end,
+  }, function(item)
+    if item then
+      Path:new(item.filename):rm()
+      local cwd = vim.loop.cwd()
+      if utils.is_session and cwd and item.filename == config.dir_to_session_filename(cwd).filename then
+        utils.is_session = false
+      end
       session_manager.delete_session()
     end
   end)
