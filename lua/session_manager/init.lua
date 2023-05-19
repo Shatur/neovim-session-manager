@@ -68,19 +68,17 @@ end
 function session_manager.delete_session()
   local sessions = utils.get_sessions()
   vim.ui.select(sessions, {
-      prompt = 'Delete Session',
-      format_item = function(item)
-        return utils.shorten_path(item.dir)
+    prompt = 'Delete Session',
+    format_item = function(item) return utils.shorten_path(item.dir) end,
+  }, function(item)
+    if item then
+      Path:new(item.filename):rm()
+      local cwd = vim.loop.cwd()
+      if utils.is_session and cwd and item.filename == config.dir_to_session_filename(cwd).filename then
+        utils.is_session = false
       end
-    }, function(item)
-      if item then
-        Path:new(item.filename):rm()
-        local cwd = vim.loop.cwd()
-        if utils.is_session and cwd and item.filename == config.dir_to_session_filename(cwd).filename then
-          utils.is_session = false
-        end
-        session_manager.delete_session()
-      end
+      session_manager.delete_session()
+    end
   end)
 end
 
