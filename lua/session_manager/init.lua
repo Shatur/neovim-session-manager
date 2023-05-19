@@ -12,16 +12,13 @@ function session_manager.setup(values) setmetatable(config, { __index = vim.tbl_
 ---@param discard_current boolean: If `true`, do not check for unsaved buffers.
 function session_manager.load_session(discard_current)
   local sessions = utils.get_sessions()
-
-  local display_names = {}
-  for _, session in ipairs(sessions) do
-    table.insert(display_names, utils.shorten_path(session.dir))
-  end
-
-  vim.ui.select(display_names, { prompt = 'Load Session' }, function(_, idx)
-    if idx then
+  vim.ui.select(sessions, {
+    prompt = 'Load Session',
+    format_item = function(item) return utils.shorten_path(item.dir) end,
+  }, function(item)
+    if item then
       session_manager.autosave_session()
-      utils.load_session(sessions[idx].filename, discard_current)
+      utils.load_session(item.filename, discard_current)
     end
   end)
 end
