@@ -78,10 +78,12 @@ function utils.load_session(filename, discard_current)
     vim.api.nvim_buf_delete(current_buffer, { force = true })
 
     utils.is_session = true
+    local swapfile = vim.o.swapfile
     vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPre' })
     vim.api.nvim_command('silent source ' .. filename)
     vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPost' })
     close_unused_lsp_clients()
+    vim.o.swapfile = swapfile
   end)
 end
 
