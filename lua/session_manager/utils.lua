@@ -126,12 +126,6 @@ function utils.get_sessions()
   end
   table.sort(sessions, function(a, b) return a.timestamp > b.timestamp end)
 
-  -- If the last session is the current one, then preselect the previous one.
-  local cwd = vim.loop.cwd()
-  if #sessions >= 2 and cwd and config.dir_to_session_filename(cwd).filename == sessions[1].filename then
-    sessions[1], sessions[2] = sessions[2], sessions[1]
-  end
-
   return sessions
 end
 
