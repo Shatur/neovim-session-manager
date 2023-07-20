@@ -48,7 +48,6 @@ config.defaults = {
   autosave_ignore_buftypes = {},
   autosave_only_in_session = false,
   max_path_length = 80,
-  show_last_session_on_top = false,
 }
 
 setmetatable(config, { __index = config.defaults })
