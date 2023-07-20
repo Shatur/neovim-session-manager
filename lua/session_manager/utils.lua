@@ -127,12 +127,10 @@ function utils.get_sessions()
   table.sort(sessions, function(a, b) return a.timestamp > b.timestamp end)
 
   -- If we are in a session already, don't list the current session.
-  -- If we are not inside a session, show the latest saved session on top.
   if utils.is_session then
     local cwd = vim.loop.cwd()
-    if #sessions >= 2 and cwd and config.dir_to_session_filename(cwd).filename == sessions[1].filename then
-      table.remove(sessions, 1)
-    end
+    local is_current_session = #sessions >= 2 and cwd and config.dir_to_session_filename(cwd).filename == sessions[1].filename
+    if is_current_session then table.remove(sessions, 1) end
   end
 
   return sessions
