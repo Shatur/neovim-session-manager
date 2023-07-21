@@ -14,7 +14,7 @@ Use the command `:SessionManager[!]` with one of the following arguments:
 
 | Argument                   | Description                                                                                  |
 | -------------------------- | -------------------------------------------------------------------------------------------- |
-| `load_session`             | Select and load session.                                                                     |
+| `load_session`             | Select and load session. (Your current session won't appear on the list).                    |
 | `load_last_session`        | Will remove all buffers and `:source` the last saved session.                                |
 | `load_current_dir_session` | Will remove all buffers and `:source` the last saved session file of the current dirtectory. |
 | `save_current_session`     | Works like `:mksession`, but saves/creates current directory as a session in `sessions_dir`. |

@@ -126,13 +126,18 @@ function utils.get_sessions()
   end
   table.sort(sessions, function(a, b) return a.timestamp > b.timestamp end)
 
-  -- If we are in a session already, show the penultimate saved session on top.
-  -- If we are not inside a session, show the latest saved session on top.
+  -- If we are in a session already, don't list the current session.
   if utils.is_session then
     local cwd = vim.loop.cwd()
-    if #sessions >= 2 and cwd and config.dir_to_session_filename(cwd).filename == sessions[1].filename then
-      sessions[1], sessions[2] = sessions[2], sessions[1]
+    local is_current_session = cwd and config.dir_to_session_filename(cwd).filename == sessions[1].filename
+    if is_current_session then
+      table.remove(sessions, 1)
     end
+  end
+
+  -- If no sessions to list, send a notification.
+  if #sessions == 0 then
+    vim.notify('The only available session is your current session. Nothing to select from.', vim.log.levels.INFO)
   end
 
   return sessions
