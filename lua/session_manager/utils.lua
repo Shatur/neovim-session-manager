@@ -126,11 +126,16 @@ function utils.get_sessions()
   end
   table.sort(sessions, function(a, b) return a.timestamp > b.timestamp end)
 
-  -- If we are in a session already, don't list the current session.
   if utils.is_session then
+    -- If we are in a session already, don't list the current session.
     local cwd = vim.loop.cwd()
-    local is_current_session = #sessions >= 2 and cwd and config.dir_to_session_filename(cwd).filename == sessions[1].filename
+    local is_current_session = cwd and config.dir_to_session_filename(cwd).filename == sessions[1].filename
     if is_current_session then table.remove(sessions, 1) end
+
+    -- If no sessions to list, show a notification.
+    if (is_current_session and #sessions == 0) or sessions == nil then
+        vim.notify("The only available session is your current session. Nothing to show yet.", vim.log.levels.INFO)
+    end
   end
 
   return sessions
