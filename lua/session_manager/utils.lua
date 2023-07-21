@@ -130,12 +130,14 @@ function utils.get_sessions()
   if utils.is_session then
     local cwd = vim.loop.cwd()
     local is_current_session = cwd and config.dir_to_session_filename(cwd).filename == sessions[1].filename
-    if is_current_session then table.remove(sessions, 1) end
+    if is_current_session then
+      table.remove(sessions, 1)
+    end
   end
 
   -- If no sessions to list, send a notification.
   if #sessions == 0 then
-    vim.notify("The only available session is your current session. Nothing to select from.", vim.log.levels.INFO)
+    vim.notify('The only available session is your current session. Nothing to select from.', vim.log.levels.INFO)
   end
 
   return sessions
