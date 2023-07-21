@@ -133,8 +133,8 @@ function utils.get_sessions()
     if is_current_session then table.remove(sessions, 1) end
 
     -- If no sessions to list, show a notification.
-    if (is_current_session and #sessions == 0) or sessions == nil then
-        vim.notify("The only available session is your current session. Nothing to show yet.", vim.log.levels.INFO)
+    if is_current_session and #sessions == 0 then
+        vim.notify("The only available session is your current session. Nothing to select from.", vim.log.levels.INFO)
     end
   end
 
