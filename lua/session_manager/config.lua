@@ -47,6 +47,7 @@ config.defaults = {
   },
   autosave_ignore_buftypes = {},
   autosave_only_in_session = false,
+  autosave_extra_predicate = nil,
   max_path_length = 80,
 }
 
