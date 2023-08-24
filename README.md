@@ -79,13 +79,13 @@ vim.api.nvim_create_autocmd({ 'User' }, {
 Example how to save session every time a buffer is written:
 
 ```lua
-vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
+vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   group = config_group,
   callback = function ()
     if vim.bo.filetype ~= 'git'
       and not vim.bo.filetype ~= 'gitcommit'
       and not vim.bo.filetype ~= 'gitrebase'
-      then session_manager.autosave_session() end
+      then session_manager.save_current_session() end
   end
 })
 ```
