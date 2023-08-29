@@ -3,25 +3,6 @@ local scandir = require('plenary.scandir')
 local Path = require('plenary.path')
 local utils = { is_session = false }
 
-local function close_unused_lsp_clients()
-  local bufs = vim.api.nvim_list_bufs()
-  local lsp_clients = vim.lsp.get_active_clients()
-  for _, client in pairs(lsp_clients) do
-    if client.config.root_dir ~= vim.loop.cwd() then
-      local active = false
-      for _, bufnr in pairs(bufs) do
-        if client.attached_buffers[bufnr] ~= nil then
-          active = true
-          break
-        end
-      end
-      if active == false then
-        vim.lsp.stop_client(client.id)
-      end
-    end
-  end
-end
-
 --- A small wrapper around `vim.notify` that adds plugin title.
 ---@param msg string
 ---@param log_level number
@@ -83,7 +64,6 @@ function utils.load_session(filename, discard_current)
     vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPre' })
     vim.api.nvim_command('silent source ' .. filename)
     vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPost' })
-    close_unused_lsp_clients()
     vim.o.swapfile = swapfile
   end)
 end
