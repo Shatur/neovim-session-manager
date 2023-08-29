@@ -79,6 +79,9 @@ vim.api.nvim_create_autocmd({ 'User' }, {
 Example how to save session every time a buffer is written:
 
 ```lua
+-- Important: This will close anything non-buffer,
+-- including notifications, neotree, aerial...
+-- So if you need to keep them open, use 'VimLeavePre'.
 vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   group = config_group,
   callback = function ()
