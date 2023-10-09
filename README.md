@@ -74,21 +74,21 @@ vim.api.nvim_create_autocmd({ 'User' }, {
 })
 ```
 
-## Save session on save buffer
+## Save session on BufWrite
 
-Example how to save session every time a buffer is written:
+You can enable this opt in feature with
 
 ```lua
--- Important: This will close anything non-buffer,
--- including notifications, neotree, aerial...
--- So if you need to keep them open, use 'VimLeavePre'.
+-- Auto save session
 vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
-  group = config_group,
   callback = function ()
-    if vim.bo.filetype ~= 'git'
-      and not vim.bo.filetype ~= 'gitcommit'
-      and not vim.bo.filetype ~= 'gitrebase'
-      then session_manager.save_current_session() end
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      -- Don't save while there's any 'nofile' buffer open.
+      if vim.api.nvim_get_option_value("buftype", { buf = buf }) == 'nofile' then
+        return
+      end
+    end
+    session_manager.save_current_session()
   end
 })
 ```
