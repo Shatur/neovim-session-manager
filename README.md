@@ -74,23 +74,16 @@ vim.api.nvim_create_autocmd({ 'User' }, {
 })
 ```
 
-## Save session on save buffer
-
-Example how to save session every time a buffer is written:
-
+## Save session on BufWrite
+You can enable this opt in feature with
 ```lua
+-- Auto save session
 vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   callback = function ()
-    -- HOTFIX: Disable autosave while there is a nofile buffer open.
-    -- This won't be necessary once this neovim bug has been solved:
-    -- https://github.com/Shatur/neovim-session-manager/issues/98
+    -- Don't save while there's any 'nofile' buffer open.
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
       local buftype = vim.api.nvim_buf_get_option(buf, 'buftype')
-      if buftype == 'nofile' then vim.notify(
-          "Current session won't we auto-saved until you close all 'nofile' buffers.",
-          vim.log.levels.INFO, { title = "neovim-session-manager" })
-          return
-      end
+      if buftype == 'nofile' then return end
     end
     session_manager.save_current_session()
   end
