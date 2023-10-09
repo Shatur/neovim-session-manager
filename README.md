@@ -79,16 +79,20 @@ vim.api.nvim_create_autocmd({ 'User' }, {
 Example how to save session every time a buffer is written:
 
 ```lua
--- Important: This will close anything non-buffer,
--- including notifications, neotree, aerial...
--- So if you need to keep them open, use 'VimLeavePre'.
 vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
-  group = config_group,
   callback = function ()
-    if vim.bo.filetype ~= 'git'
-      and not vim.bo.filetype ~= 'gitcommit'
-      and not vim.bo.filetype ~= 'gitrebase'
-      then session_manager.save_current_session() end
+    -- HOTFIX: Disable autosave while there is a nofile buffer open.
+    -- This won't be necessary once this neovim bug has been solved:
+    -- https://github.com/Shatur/neovim-session-manager/issues/98
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      local buftype = vim.api.nvim_buf_get_option(buf, 'buftype')
+      if buftype == 'nofile' then vim.notify(
+          "Current session won't we auto-saved until you close all 'nofile' buffers.",
+          vim.log.levels.INFO, { title = "neovim-session-manager" })
+          return
+      end
+    end
+    session_manager.save_current_session()
   end
 })
 ```
