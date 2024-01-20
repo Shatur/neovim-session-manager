@@ -69,14 +69,21 @@ function session_manager.delete_session()
     format_item = function(item) return utils.shorten_path(item.dir) end,
   }, function(item)
     if item then
-      Path:new(item.filename):rm()
-      local cwd = vim.loop.cwd()
-      if utils.is_session and cwd and item.filename == config.dir_to_session_filename(cwd).filename then
-        utils.is_session = false
-      end
+      utils.delete_session(item.filename)
       session_manager.delete_session()
     end
   end)
+end
+
+--- Deletes the session for the current working directory.
+function session_manager.delete_current_dir_session()
+  local cwd = vim.loop.cwd()
+  if cwd then
+    local session = config.dir_to_session_filename(cwd)
+    if session:exists() then
+      utils.delete_session(session)
+    end
+  end
 end
 
 --- Saves a session based on settings. Executed before exiting the editor.

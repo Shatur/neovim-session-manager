@@ -93,6 +93,15 @@ function utils.save_session(filename)
   vim.api.nvim_exec_autocmds('User', { pattern = 'SessionSavePost' })
 end
 
+---@param filename string
+function utils.delete_session(filename)
+  Path:new(filename):rm()
+  local cwd = vim.loop.cwd()
+  if utils.is_session and cwd and filename == config.dir_to_session_filename(cwd).filename then
+    utils.is_session = false
+  end
+end
+
 ---@return table
 function utils.get_sessions()
   local sessions = {}
