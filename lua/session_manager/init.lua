@@ -1,7 +1,6 @@
 local config = require('session_manager.config')
 local AutoloadMode = require('session_manager.config').AutoloadMode
 local utils = require('session_manager.utils')
-local Path = require('plenary.path')
 local session_manager = {}
 
 --- Apply user settings.
