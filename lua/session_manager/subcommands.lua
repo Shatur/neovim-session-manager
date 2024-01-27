@@ -29,6 +29,10 @@ end
 --- Run specified subcommand received from completion.
 ---@param subcommand table
 function subcommands.run(subcommand)
+  if subcommand.args == '' then
+    session_manager.available_commands()
+    return
+  end
   local subcommand_func = session_manager[subcommand.fargs[1]]
   if not subcommand_func then
     utils.notify('No such subcommand: ' .. subcommand.fargs[1], vim.log.levels.ERROR)

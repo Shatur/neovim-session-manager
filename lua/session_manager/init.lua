@@ -7,6 +7,30 @@ local session_manager = {}
 ---@param values table
 function session_manager.setup(values) setmetatable(config, { __index = vim.tbl_extend('force', config.defaults, values) }) end
 
+-- Displays action selection menu for :SessionManager
+function session_manager.available_commands()
+  local command_opts = {
+    ['Delete current dir session'] = 'delete_current_dir_session',
+    ['Delete sessions'] = 'delete_session',
+    ['Load current dir session'] = 'load_current_dir_session',
+    ['Load last session'] = 'load_last_session',
+    ['Load sessions'] = 'load_session',
+    ['Save current session'] = 'save_current_session',
+  }
+  local ui_commands = {}
+  for cmd, _ in pairs(command_opts) do
+    table.insert(ui_commands, cmd)
+  end
+  vim.ui.select(ui_commands, {
+    prompt = 'Session Manager',
+    format_item = function(item) return item end,
+  }, function(item)
+    if item then
+      session_manager[command_opts[item]]()
+    end
+  end)
+end
+
 --- Selects a session a loads it.
 ---@param discard_current boolean: If `true`, do not check for unsaved buffers.
 function session_manager.load_session(discard_current)
