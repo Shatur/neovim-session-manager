@@ -9,24 +9,18 @@ function session_manager.setup(values) setmetatable(config, { __index = vim.tbl_
 
 -- Displays action selection menu for :SessionManager
 function session_manager.available_commands()
-  local command_opts = {
-    ['Delete current dir session'] = 'delete_current_dir_session',
-    ['Delete sessions'] = 'delete_session',
-    ['Load current dir session'] = 'load_current_dir_session',
-    ['Load last session'] = 'load_last_session',
-    ['Load sessions'] = 'load_session',
-    ['Save current session'] = 'save_current_session',
-  }
-  local ui_commands = {}
-  for cmd, _ in pairs(command_opts) do
-    table.insert(ui_commands, cmd)
+  local commands = {}
+  for cmd, _ in pairs(session_manager) do
+    if cmd ~= 'setup' and cmd ~= 'available_commands' and cmd ~= 'autosave_session' then
+      table.insert(commands, cmd)
+    end
   end
-  vim.ui.select(ui_commands, {
+  vim.ui.select(commands, {
     prompt = 'Session Manager',
-    format_item = function(item) return item end,
+    format_item = function(item) return item:gsub('_', ' ') end,
   }, function(item)
     if item then
-      session_manager[command_opts[item]]()
+      session_manager[item]()
     end
   end)
 end
