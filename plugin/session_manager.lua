@@ -6,7 +6,7 @@ end
 local subcommands = require('session_manager.subcommands')
 local session_manager = require('session_manager')
 
-vim.api.nvim_create_user_command('SessionManager', subcommands.run, { nargs = 1, bang = true, complete = subcommands.complete, desc = 'Run session manager command' })
+vim.api.nvim_create_user_command('SessionManager', subcommands.run, { nargs = '*', bang = true, complete = subcommands.complete, desc = 'Run session manager command' })
 
 local session_manager_group = vim.api.nvim_create_augroup('SessionManager', {})
 vim.api.nvim_create_autocmd({ 'VimEnter' }, {

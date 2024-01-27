@@ -7,6 +7,24 @@ local session_manager = {}
 ---@param values table
 function session_manager.setup(values) setmetatable(config, { __index = vim.tbl_extend('force', config.defaults, values) }) end
 
+-- Displays action selection menu for :SessionManager
+function session_manager.available_commands()
+  local commands = {}
+  for cmd, _ in pairs(session_manager) do
+    if cmd ~= 'setup' and cmd ~= 'available_commands' and cmd ~= 'autosave_session' then
+      table.insert(commands, cmd)
+    end
+  end
+  vim.ui.select(commands, {
+    prompt = 'Session Manager',
+    format_item = function(item) return item:sub(1, 1):upper() .. item:sub(2):gsub('_', ' ') end,
+  }, function(item)
+    if item then
+      session_manager[item]()
+    end
+  end)
+end
+
 --- Selects a session a loads it.
 ---@param discard_current boolean: If `true`, do not check for unsaved buffers.
 function session_manager.load_session(discard_current)
