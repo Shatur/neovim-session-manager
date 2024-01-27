@@ -17,7 +17,7 @@ function session_manager.available_commands()
   end
   vim.ui.select(commands, {
     prompt = 'Session Manager',
-    format_item = function(item) return item:gsub('_', ' ') end,
+    format_item = function(item) return item:sub(1, 1):upper() .. item:sub(2):gsub("_", " ") end,
   }, function(item)
     if item then
       session_manager[item]()
