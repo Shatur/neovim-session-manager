@@ -64,7 +64,9 @@ end
 function session_manager.save_current_session()
   local cwd = vim.loop.cwd()
   if cwd then
-    utils.save_session(config.dir_to_session_filename(cwd).filename)
+    if vim.api.nvim_buf_get_option(0, 'buftype') ~= 'nofile' then
+      utils.save_session(config.dir_to_session_filename(cwd).filename)
+    end
   end
 end
 
