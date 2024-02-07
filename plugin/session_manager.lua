@@ -14,7 +14,7 @@ vim.api.nvim_create_autocmd({ 'VimEnter' }, {
   nested = true,
   callback = session_manager.autoload_session,
 })
-vim.api.nvim_create_autocmd({ 'VimLeavePre' }, {
+vim.api.nvim_create_autocmd({ 'VimLeavePre', 'DirChangedPre' }, {
   group = session_manager_group,
   callback = session_manager.autosave_session,
 })
