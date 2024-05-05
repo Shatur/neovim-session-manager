@@ -47,25 +47,22 @@ function utils.load_session(filename, discard_current)
     end
   end
 
-  -- Scedule buffers cleanup to avoid callback issues and source the session.
-  vim.schedule(function()
-    -- Delete all buffers first except the current one to avoid entering buffers scheduled for deletion.
-    local current_buffer = vim.api.nvim_get_current_buf()
-    for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
-      if vim.api.nvim_buf_is_valid(buffer) and buffer ~= current_buffer then
-        vim.api.nvim_buf_delete(buffer, { force = true })
-      end
+  -- Delete all buffers first except the current one to avoid entering buffers scheduled for deletion.
+  local current_buffer = vim.api.nvim_get_current_buf()
+  for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_valid(buffer) and buffer ~= current_buffer then
+      vim.api.nvim_buf_delete(buffer, { force = true })
     end
-    vim.api.nvim_buf_delete(current_buffer, { force = true })
+  end
+  vim.api.nvim_buf_delete(current_buffer, { force = true })
 
-    local swapfile = vim.o.swapfile
-    vim.o.swapfile = false
-    utils.is_session = true
-    vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPre' })
-    vim.api.nvim_command('silent source ' .. filename)
-    vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPost' })
-    vim.o.swapfile = swapfile
-  end)
+  local swapfile = vim.o.swapfile
+  vim.o.swapfile = false
+  utils.is_session = true
+  vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPre' })
+  vim.api.nvim_command('silent source ' .. filename)
+  vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPost' })
+  vim.o.swapfile = swapfile
 end
 
 ---@param filename string
