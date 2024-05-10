@@ -99,10 +99,11 @@ function utils.delete_session(filename)
   end
 end
 
+---@param opts table?: Additional arguments. Currently only `silent` is supported.
 ---@return table
-function utils.get_sessions()
+function utils.get_sessions(opts)
   local sessions = {}
-  for _, session_filename in ipairs(scandir.scan_dir(tostring(config.sessions_dir))) do
+  for _, session_filename in ipairs(scandir.scan_dir(tostring(config.sessions_dir), opts)) do
     local dir = config.session_filename_to_dir(session_filename)
     if dir:is_dir() then
       table.insert(sessions, { timestamp = vim.fn.getftime(session_filename), filename = session_filename, dir = dir })
@@ -122,7 +123,7 @@ function utils.get_sessions()
   end
 
   -- If no sessions to list, send a notification.
-  if #sessions == 0 then
+  if not(opts and opts.silent) and #sessions == 0 then
     vim.notify('The only available session is your current session. Nothing to select from.', vim.log.levels.INFO)
   end
 
