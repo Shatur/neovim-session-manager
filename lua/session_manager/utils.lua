@@ -123,7 +123,7 @@ function utils.get_sessions(opts)
   end
 
   -- If no sessions to list, send a notification.
-  if not(opts and opts.silent) and #sessions == 0 then
+  if not (opts and opts.silent) and #sessions == 0 then
     vim.notify('The only available session is your current session. Nothing to select from.', vim.log.levels.INFO)
   end
 
