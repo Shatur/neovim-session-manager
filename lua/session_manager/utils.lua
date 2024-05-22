@@ -93,7 +93,7 @@ end
 ---@param filename string
 function utils.delete_session(filename)
   Path:new(filename):rm()
-  local cwd = vim.loop.cwd()
+  local cwd = vim.uv.cwd()
   if utils.is_session and cwd and filename == config.dir_to_session_filename(cwd).filename then
     utils.is_session = false
   end
@@ -115,7 +115,7 @@ function utils.get_sessions(opts)
 
   -- If we are in a session already, don't list the current session.
   if utils.is_session then
-    local cwd = vim.loop.cwd()
+    local cwd = vim.uv.cwd()
     local is_current_session = cwd and config.dir_to_session_filename(cwd).filename == sessions[1].filename
     if is_current_session then
       table.remove(sessions, 1)
@@ -173,7 +173,7 @@ end
 
 ---@return boolean
 function utils.is_dir_in_ignore_list()
-  local cwd = vim.loop.cwd()
+  local cwd = vim.uv.cwd()
   -- Use `fnamemodify` to allow paths like `~/.config`.
   return vim.tbl_contains(config.autosave_ignore_dirs, cwd) or vim.tbl_contains(config.autosave_ignore_dirs, vim.fn.fnamemodify(cwd, ':~'))
 end

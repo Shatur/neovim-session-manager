@@ -51,7 +51,7 @@ end
 
 --- Loads a session for the current working directory.
 function session_manager.load_current_dir_session(discard_current)
-  local cwd = vim.loop.cwd()
+  local cwd = vim.uv.cwd()
   if cwd then
     local session = config.dir_to_session_filename(cwd)
     if session:exists() then
@@ -62,7 +62,7 @@ end
 
 --- Saves a session for the current working directory.
 function session_manager.save_current_session()
-  local cwd = vim.loop.cwd()
+  local cwd = vim.uv.cwd()
   if cwd then
     utils.save_session(config.dir_to_session_filename(cwd).filename)
   end
@@ -94,7 +94,7 @@ end
 
 --- Deletes the session for the current working directory.
 function session_manager.delete_current_dir_session()
-  local cwd = vim.loop.cwd()
+  local cwd = vim.uv.cwd()
   if cwd then
     local session = config.dir_to_session_filename(cwd)
     if session:exists() then

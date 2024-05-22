@@ -1,5 +1,5 @@
-if not vim.fn.has('nvim-0.7.0') then
-  require('session_manager.utils').notify('Neovim 0.7+ is required for session manager plugin', vim.log.levels.ERROR)
+if not vim.fn.has('nvim-0.10.0') then
+  require('session_manager.utils').notify('Neovim 0.10+ is required for session manager plugin', vim.log.levels.ERROR)
   return
 end
 
