@@ -42,6 +42,7 @@ end
 
 --- Loads saved used session.
 ---@param discard_current boolean?: If `true`, do not check for unsaved buffers.
+---@return boolean: `true` if session was loaded, `false` otherwise.
 function session_manager.load_last_session(discard_current)
   local last_session = utils.get_last_session_filename()
   if last_session then
@@ -52,6 +53,7 @@ function session_manager.load_last_session(discard_current)
 end
 
 --- Loads a session for the current working directory.
+---@return boolean: `true` if session was loaded, `false` otherwise.
 function session_manager.load_current_dir_session(discard_current)
   local cwd = vim.uv.cwd()
   if cwd then
