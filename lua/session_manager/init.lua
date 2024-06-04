@@ -40,7 +40,7 @@ function session_manager.load_session(discard_current)
   end)
 end
 
---- Loads saved used session.
+--- Tries to load the last saved session.
 ---@param discard_current boolean?: If `true`, do not check for unsaved buffers.
 ---@return boolean: `true` if session was loaded, `false` otherwise.
 function session_manager.load_last_session(discard_current)
@@ -52,7 +52,7 @@ function session_manager.load_last_session(discard_current)
   return false
 end
 
---- Loads a session for the current working directory.
+--- Tries to load a session for the current working directory.
 ---@return boolean: `true` if session was loaded, `false` otherwise.
 function session_manager.load_current_dir_session(discard_current)
   local cwd = vim.uv.cwd()
@@ -85,10 +85,12 @@ function session_manager.autoload_session()
   if vim.fn.argc() > 0 or vim.g.started_with_stdin then
     return
   end
+
   local modes = config.autoload_mode
   if not vim.isarray(config.autoload_mode) then
     modes = { config.autoload_mode }
   end
+
   for _, mode in ipairs(modes) do
     if autoloaders[mode]() then
       return
