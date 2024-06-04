@@ -46,7 +46,9 @@ function session_manager.load_last_session(discard_current)
   local last_session = utils.get_last_session_filename()
   if last_session then
     utils.load_session(last_session, discard_current)
+    return true
   end
+  return false
 end
 
 --- Loads a session for the current working directory.
@@ -56,8 +58,10 @@ function session_manager.load_current_dir_session(discard_current)
     local session = config.dir_to_session_filename(cwd)
     if session:exists() then
       utils.load_session(session.filename, discard_current)
+      return true
     end
   end
+  return false
 end
 
 --- Saves a session for the current working directory.
@@ -69,10 +73,14 @@ function session_manager.save_current_session()
 end
 
 local get_autoload_mode = function()
-  if config.autoload_mode == nil or vim.fn.argc() > 0 or vim.g.started_with_stdin then
+  if config.autoload_mode == AutoloadMode.Disabled or
+      vim.fn.argc() > 0
+      or vim.g.started_with_stdin then
     return { AutoloadMode.Disabled }
   end
-  if type(config.autoload_mode) ~= 'table' then
+  if config.autoload_mode == AutoloadMode.CurrentDir or
+      config.autoload_mode == AutoloadMode.LastSession then
+    -- Don't break existing configurations
     return { config.autoload_mode }
   end
   return config.autoload_mode
