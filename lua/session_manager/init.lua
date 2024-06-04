@@ -68,13 +68,27 @@ function session_manager.save_current_session()
   end
 end
 
+local get_autoload_mode = function()
+  if config.autoload_mode == nil or vim.fn.argc() > 0 or vim.g.started_with_stdin then
+    return { AutoloadMode.Disabled }
+  end
+  if type(config.autoload_mode) ~= 'table' then
+    return { config.autoload_mode }
+  end
+  return config.autoload_mode
+end
+
+local autoloaders = {
+  [AutoloadMode.Disabled] = function() return true end,
+  [AutoloadMode.CurrentDir] = session_manager.load_current_dir_session,
+  [AutoloadMode.LastSession] = session_manager.load_last_session,
+}
+
 --- Loads a session based on settings. Executed after starting the editor.
 function session_manager.autoload_session()
-  if config.autoload_mode ~= AutoloadMode.Disabled and vim.fn.argc() == 0 and not vim.g.started_with_stdin then
-    if config.autoload_mode == AutoloadMode.CurrentDir then
-      session_manager.load_current_dir_session()
-    elseif config.autoload_mode == AutoloadMode.LastSession then
-      session_manager.load_last_session()
+  for _, mode in ipairs(get_autoload_mode()) do
+    if autoloaders[mode]() then
+      return
     end
   end
 end
