@@ -9,6 +9,7 @@ local config = {
     'Disabled',
     'CurrentDir',
     'LastSession',
+    'GitSession',
   }),
 }
 
