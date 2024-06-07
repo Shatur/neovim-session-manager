@@ -12,14 +12,15 @@ The plugin saves the sessions in the specified folder (see [configuration](#conf
 
 Use the command `:SessionManager[!]` with one of the following arguments:
 
-| Argument                     | Description                                                                                                                                                        |
-| -----------------------------| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `load_session`               | Select and load session. (Your current session won't appear on the list).                                                                                          |
-| `load_last_session`          | Removes all buffers and tries to `:source` the last saved session. Returns `true` if the session was restored and `false` otherwise.                               |
-| `load_current_dir_session`   | Removes all buffers and tries to `:source` the last saved session file of the current directory. Returns `true` if the session was restored and `false` otherwise. |
-| `save_current_session`       | Works like `:mksession`, but saves/creates current directory as a session in `sessions_dir`.                                                                       |
-| `delete_session`             | Select and delete session.                                                                                                                                         |
-| `delete_current_dir_session` | Deletes the session associated with the current directory.                                                                                                         |
+| Argument                     | Description                                                                                                                                                                             |
+| -----------------------------| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `load_session`               | Select and load session. (Your current session won't appear on the list).                                                                                                               |
+| `load_last_session`          | Removes all buffers and tries to `:source` the last saved session. Returns `true` if the session was restored and `false` otherwise.                                                    |
+| `load_current_dir_session`   | Removes all buffers and tries to `:source` the last saved session of the current directory. Returns `true` if the session was restored and `false` otherwise.                           |
+| `load_git_session`           | When in a git repo, removes all buffers and tries to `:source` the last saved session of the git repo root directory. Returns `true` if the session was restored and `false` otherwise. |
+| `save_current_session`       | Works like `:mksession`, but saves/creates current directory as a session in `sessions_dir`.                                                                                            |
+| `delete_session`             | Select and delete session.                                                                                                                                                              |
+| `delete_current_dir_session` | Deletes the session associated with the current directory.                                                                                                                              |
 
 When `!` is specified, the modified buffers will not be saved.
 
@@ -54,11 +55,12 @@ require('session_manager').setup({
 
 If Neovim is started without arguments the value of the autoload_mode option is used to determine which session to initially load. The following modes are supported:
 
-| Mode        | Description                                                  |
-| ----------- | ------------------------------------------------------------ |
-| Disabled    | No session will be loaded.                                   |
-| CurrentDir  | The session in the current working directory will be loaded. |
-| LastSession | The last session will be loaded. This is the default.        |
+| Mode        | Description                                                     |
+| ----------- | --------------------------------------------------------------- |
+| Disabled    | No session will be loaded.                                      |
+| CurrentDir  | The session in the current working directory will be loaded.    |
+| LastSession | The last session will be loaded. This is the default.           |
+| GitSession  | If in a git repo the session for repository root will be loaded |
 
 `autoload_mode` can be set to either a single mode or an array of modes, in which
 case each mode will be tried until one succeeds e.g.

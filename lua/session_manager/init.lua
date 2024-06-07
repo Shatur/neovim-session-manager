@@ -1,11 +1,15 @@
 local config = require('session_manager.config')
 local AutoloadMode = require('session_manager.config').AutoloadMode
 local utils = require('session_manager.utils')
+local Job = require('plenary.job')
 local session_manager = {}
 
 --- Apply user settings.
 ---@param values table
-function session_manager.setup(values) setmetatable(config, { __index = vim.tbl_extend('force', config.defaults, values) }) end
+function session_manager.setup(values)
+  setmetatable(config,
+    { __index = vim.tbl_extend('force', config.defaults, values) })
+end
 
 -- Displays action selection menu for :SessionManager
 function session_manager.available_commands()
@@ -66,6 +70,25 @@ function session_manager.load_current_dir_session(discard_current)
   return false
 end
 
+--- If in a git repo, tries to load a session for the repo's root directory
+---@return boolean: `true` if session was loaded, `false` otherwise.
+function session_manager.load_git_session(discard_current)
+  local job = Job:new({
+    command = "git",
+    args = { "rev-parse", "--show-toplevel" },
+  })
+  job:sync()
+  local git_dir = job:result()[1]
+  if (git_dir) then
+    local session = config.dir_to_session_filename(git_dir)
+    if session:exists() then
+      utils.load_session(session.filename, discard_current)
+      return true
+    end
+  end
+  return false
+end
+
 --- Saves a session for the current working directory.
 function session_manager.save_current_session()
   local cwd = vim.uv.cwd()
@@ -78,6 +101,7 @@ local autoloaders = {
   [AutoloadMode.Disabled] = function() return true end,
   [AutoloadMode.CurrentDir] = session_manager.load_current_dir_session,
   [AutoloadMode.LastSession] = session_manager.load_last_session,
+  [AutoloadMode.GitSession] = session_manager.load_git_session,
 }
 
 --- Loads a session based on settings. Executed after starting the editor.
