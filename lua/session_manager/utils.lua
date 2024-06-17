@@ -1,7 +1,7 @@
 local config = require('session_manager.config')
 local scandir = require('plenary.scandir')
 local Path = require('plenary.path')
-local utils = {}
+local utils = { is_session = false }
 
 --- A small wrapper around `vim.notify` that adds plugin title.
 ---@param msg string
@@ -58,6 +58,7 @@ function utils.load_session(filename, discard_current)
 
   local swapfile = vim.o.swapfile
   vim.o.swapfile = false
+  utils.is_session = true
   vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPre' })
   vim.api.nvim_command('silent source ' .. filename)
   vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPost' })
@@ -83,13 +84,20 @@ function utils.save_session(filename)
     vim.api.nvim_command('%argdel')
   end
 
+  utils.is_session = true
   vim.api.nvim_exec_autocmds('User', { pattern = 'SessionSavePre' })
   vim.api.nvim_command('mksession! ' .. filename)
   vim.api.nvim_exec_autocmds('User', { pattern = 'SessionSavePost' })
 end
 
 ---@param filename string
-function utils.delete_session(filename) Path:new(filename):rm() end
+function utils.delete_session(filename)
+  Path:new(filename):rm()
+  local cwd = vim.uv.cwd()
+  if utils.is_session and cwd and filename == config.dir_to_session_filename(cwd).filename then
+    utils.is_session = false
+  end
+end
 
 ---@param opts table?: Additional arguments. Currently only `silent` is supported.
 ---@return table
@@ -106,7 +114,7 @@ function utils.get_sessions(opts)
   table.sort(sessions, function(a, b) return a.timestamp > b.timestamp end)
 
   -- If we are in a session already, don't list the current session.
-  if utils.is_exist_in_session() then
+  if utils.is_session then
     local cwd = vim.uv.cwd()
     local is_current_session = cwd and config.dir_to_session_filename(cwd).filename == sessions[1].filename
     if is_current_session then
@@ -157,17 +165,6 @@ end
 function utils.is_restorable_buffer_present()
   for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_valid(buffer) and utils.is_restorable(buffer) then
-      return true
-    end
-  end
-  return false
-end
-
----@return boolean
-function utils.is_exist_in_session()
-  local cwd = vim.uv.cwd()
-  for _, session_filename in ipairs(scandir.scan_dir(tostring(config.sessions_dir))) do
-    if config.dir_to_session_filename(cwd).filename == session_filename then
       return true
     end
   end
