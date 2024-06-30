@@ -1,7 +1,7 @@
 local config = require('session_manager.config')
 local scandir = require('plenary.scandir')
 local Path = require('plenary.path')
-local utils = {}
+local utils = { active_session_filename = nil }
 
 --- A small wrapper around `vim.notify` that adds plugin title.
 ---@param msg string
@@ -56,6 +56,9 @@ function utils.load_session(filename, discard_current)
   end
   vim.api.nvim_buf_delete(current_buffer, { force = true })
 
+  -- Set the active session filename.
+  utils.active_session_filename = filename
+
   local swapfile = vim.o.swapfile
   vim.o.swapfile = false
   vim.api.nvim_exec_autocmds('User', { pattern = 'SessionLoadPre' })
@@ -83,36 +86,40 @@ function utils.save_session(filename)
     vim.api.nvim_command('%argdel')
   end
 
+  -- Set the active session filename.
+  utils.active_session_filename = filename
+
   vim.api.nvim_exec_autocmds('User', { pattern = 'SessionSavePre' })
   vim.api.nvim_command('mksession! ' .. filename)
   vim.api.nvim_exec_autocmds('User', { pattern = 'SessionSavePost' })
 end
 
 ---@param filename string
-function utils.delete_session(filename) Path:new(filename):rm() end
+function utils.delete_session(filename)
+  Path:new(filename):rm()
+
+  -- Clear the active session filename if deleted.
+  if filename == utils.active_session_filename then
+    utils.active_session_filename = nil
+  end
+end
 
 ---@param opts table?: Additional arguments. Currently only `silent` is supported.
 ---@return table
 function utils.get_sessions(opts)
   local sessions = {}
   for _, session_filename in ipairs(scandir.scan_dir(tostring(config.sessions_dir), opts)) do
-    local dir = config.session_filename_to_dir(session_filename)
-    if dir:is_dir() then
-      table.insert(sessions, { timestamp = vim.fn.getftime(session_filename), filename = session_filename, dir = dir })
-    else
-      Path:new(session_filename):rm()
+    -- Add all but the active session to the list.
+    if session_filename ~= utils.active_session_filename then
+      local dir = config.session_filename_to_dir(session_filename)
+      if dir:is_dir() then
+        table.insert(sessions, { timestamp = vim.fn.getftime(session_filename), filename = session_filename, dir = dir })
+      else
+        Path:new(session_filename):rm()
+      end
     end
   end
   table.sort(sessions, function(a, b) return a.timestamp > b.timestamp end)
-
-  -- If we are in a session already, don't list the current session.
-  if utils.is_exist_in_session() then
-    local cwd = vim.uv.cwd()
-    local is_current_session = cwd and config.dir_to_session_filename(cwd).filename == sessions[1].filename
-    if is_current_session then
-      table.remove(sessions, 1)
-    end
-  end
 
   -- If no sessions to list, send a notification.
   if not (opts and opts.silent) and #sessions == 0 then
@@ -164,14 +171,9 @@ function utils.is_restorable_buffer_present()
 end
 
 ---@return boolean
-function utils.is_exist_in_session()
+function utils.exists_in_session()
   local cwd = vim.uv.cwd()
-  for _, session_filename in ipairs(scandir.scan_dir(tostring(config.sessions_dir))) do
-    if config.dir_to_session_filename(cwd).filename == session_filename then
-      return true
-    end
-  end
-  return false
+  return config.dir_to_session_filename(cwd).filename == utils.active_session_filename
 end
 
 ---@return boolean

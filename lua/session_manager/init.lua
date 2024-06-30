@@ -149,7 +149,7 @@ function session_manager.autosave_session()
     return
   end
 
-  if config.autosave_only_in_session and not utils.is_exist_in_session() then
+  if config.autosave_only_in_session and not utils.exists_in_session() then
     return
   end
 
