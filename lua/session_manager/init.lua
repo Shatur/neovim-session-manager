@@ -138,12 +138,7 @@ function session_manager.delete_current_dir_session()
   if cwd then
     local session = config.dir_to_session_filename(cwd)
     if session:exists() then
-      utils.delete_session(session)
-
-      -- Clear the active session filename if deleted.
-      if session.filename == utils.active_session_filename then
-        utils.active_session_filename = nil
-      end
+      utils.delete_session(session.filename)
     end
   end
 end
