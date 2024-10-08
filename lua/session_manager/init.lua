@@ -67,6 +67,17 @@ function session_manager.load_current_dir_session(discard_current)
   return false
 end
 
+--- Checks if a session for the current working directory exists.
+---@return boolean: `true` if session was found, `false` otherwise.
+function session_manager.current_dir_session_exists()
+  local cwd = vim.uv.cwd()
+  if cwd then
+    local session = config.dir_to_session_filename(cwd)
+    return session:exists()
+  end
+  return false
+end
+
 --- If in a git repo, tries to load a session for the repo's root directory
 ---@return boolean: `true` if session was loaded, `false` otherwise.
 function session_manager.load_git_session(discard_current)
