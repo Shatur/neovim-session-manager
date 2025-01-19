@@ -26,7 +26,7 @@ function session_manager.available_commands()
   end)
 end
 
---- Selects a session a loads it.
+--- Selects a session and loads it.
 ---@param discard_current boolean: If `true`, do not check for unsaved buffers.
 function session_manager.load_session(discard_current)
   local sessions = utils.get_sessions()
@@ -35,7 +35,10 @@ function session_manager.load_session(discard_current)
     format_item = function(item) return utils.shorten_path(item.dir) end,
   }, function(item)
     if item then
-      session_manager.autosave_session()
+      -- If re-loading the current session, do not save it before.
+      if item.filename ~= utils.active_session_filename then
+        session_manager.autosave_session()
+      end
       utils.load_session(item.filename, discard_current)
     end
   end)

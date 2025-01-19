@@ -110,7 +110,7 @@ function utils.get_sessions(opts)
   local sessions = {}
   for _, session_filename in ipairs(scandir.scan_dir(tostring(config.sessions_dir), opts)) do
     -- Add all but the active session to the list.
-    if session_filename ~= utils.active_session_filename then
+    if config.load_include_current or session_filename ~= utils.active_session_filename then
       local dir = config.session_filename_to_dir(session_filename)
       if dir:is_dir() then
         table.insert(sessions, { timestamp = vim.fn.getftime(session_filename), filename = session_filename, dir = dir })

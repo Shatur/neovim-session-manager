@@ -13,8 +13,8 @@ The plugin saves the sessions in the specified folder (see [configuration](#conf
 Use the command `:SessionManager[!]` with one of the following arguments:
 
 | Argument                     | Description                                                                                                                                                                             |
-| -----------------------------| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `load_session`               | Select and load session. (Your current session won't appear on the list).                                                                                                               |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `load_session`               | Select and load session. (Your current session won't appear on the list by default, see configuration below).                                                                           |
 | `load_last_session`          | Removes all buffers and tries to `:source` the last saved session. Returns `true` if the session was restored and `false` otherwise.                                                    |
 | `load_current_dir_session`   | Removes all buffers and tries to `:source` the last saved session of the current directory. Returns `true` if the session was restored and `false` otherwise.                           |
 | `load_git_session`           | When in a git repo, removes all buffers and tries to `:source` the last saved session of the git repo root directory. Returns `true` if the session was restored and `false` otherwise. |
@@ -48,6 +48,7 @@ require('session_manager').setup({
   autosave_ignore_buftypes = {}, -- All buffers of these bufer types will be closed before the session is saved.
   autosave_only_in_session = false, -- Always autosaves session. If true, only autosaves after a session is active.
   max_path_length = 80,  -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
+  load_include_current = false,  -- The currently loaded session appears in the load_session UI.
 })
 ```
 
@@ -70,7 +71,6 @@ autoload_mode = { config.AutoloadMode.CurrentDir, config.AutoloadMode.LastSessio
 ```
 
 Would attempt to load the current directory session and then fallback to the last session.
-
 
 ## Autocommands
 
