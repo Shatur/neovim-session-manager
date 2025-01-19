@@ -35,7 +35,7 @@ function session_manager.load_session(discard_current)
     format_item = function(item) return utils.shorten_path(item.dir) end,
   }, function(item)
     if item then
-      -- if re-loading the current session, do not save it before
+      -- If re-loading the current session, do not save it before.
       if item.filename ~= utils.active_session_filename then
         session_manager.autosave_session()
       end
