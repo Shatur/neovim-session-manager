@@ -187,6 +187,11 @@ end
 ---@param path table
 ---@return string
 function utils.shorten_path(path)
+  -- replace home prefix with ~
+  if path.filename:sub(1, #vim.env.HOME) == vim.env.HOME then
+    path.filename = '~' .. path.filename:sub(#vim.env.HOME + 1)
+  end
+
   if config.max_path_length > 0 and #path.filename > config.max_path_length then
     -- Index to exclude from shortening, -1 means last
     local excludes = { -1 }
