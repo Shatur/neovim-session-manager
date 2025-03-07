@@ -187,7 +187,7 @@ end
 ---@param path table
 ---@return string
 function utils.shorten_path(path)
-  -- replace home prefix with ~
+  -- Replace home prefix with ~
   if path.filename:sub(1, #vim.env.HOME) == vim.env.HOME then
     path.filename = '~' .. path.filename:sub(#vim.env.HOME + 1)
   end
