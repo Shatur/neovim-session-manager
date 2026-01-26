@@ -105,6 +105,7 @@ You can enable this opt in feature with
 -- Auto save session
 vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   callback = function ()
+    local session_manager = require 'session_manager'
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
       -- Don't save while there's any 'nofile' buffer open.
       if vim.api.nvim_get_option_value("buftype", { buf = buf }) == 'nofile' then
